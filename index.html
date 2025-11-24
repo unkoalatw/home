@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portfolio</title>
@@ -37,69 +36,96 @@
   </script>
 
   <style>
-    /* 隱藏捲軸但保留功能 */
+    /* 基礎設定 */
+    body { cursor: none; } /* 隱藏預設滑鼠 */
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: #0f172a; }
     ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
     
-    /* 技能跑馬燈動畫 */
-    .marquee-container {
-      mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    /* 1. 自定義游標樣式 */
+    .cursor-dot,
+    .cursor-outline {
+      position: fixed;
+      top: 0;
+      left: 0;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      z-index: 9999;
+      pointer-events: none;
     }
-    .marquee-content {
-      animation: scroll 30s linear infinite;
+    .cursor-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #10b981; /* Emerald-500 */
     }
-    @keyframes scroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
+    .cursor-outline {
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(16, 185, 129, 0.5);
+      transition: width 0.2s, height 0.2s, background-color 0.2s;
     }
+    body.hovering .cursor-outline {
+      width: 60px;
+      height: 60px;
+      background-color: rgba(16, 185, 129, 0.1);
+      border-color: transparent;
+    }
+    
+    /* 2. 閱讀進度條 */
+    #scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 3px;
+      background: linear-gradient(to right, #10b981, #3b82f6);
+      z-index: 10000;
+      transition: width 0.1s;
+    }
+
+    /* 3. 點擊粒子特效 */
+    .click-particle {
+      position: absolute;
+      pointer-events: none;
+      border-radius: 50%;
+      animation: pop 0.6s ease-out forwards;
+    }
+    @keyframes pop {
+      0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+    }
+
+    /* 技能跑馬燈 */
+    .marquee-container { mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); }
+    .marquee-content { animation: scroll 30s linear infinite; }
+    @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
     
     /* 打字機游標 */
     .typing-cursor::after {
-      content: '';
-      display: inline-block;
-      width: 8px;
-      height: 24px;
-      background-color: #10b981;
-      margin-left: 4px;
-      vertical-align: middle;
-      animation: blink 1s infinite;
+      content: ''; display: inline-block; width: 8px; height: 24px; background-color: #10b981;
+      margin-left: 4px; vertical-align: middle; animation: blink 1s infinite;
     }
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-200 font-sans min-h-screen relative overflow-x-hidden selection:bg-emerald-500 selection:text-white">
 
-  <!-- 1. 動態星空背景 Canvas -->
-  <canvas id="star-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-40"></canvas>
-
-  <!-- 模擬器 (GAS 環境檢查) -->
+  <!-- ==================== CONFIGURATION ==================== -->
   <script>
-    if (typeof google === 'undefined') {
-      window.google = { script: { run: {
-        withSuccessHandler: (cb) => {
-          const mockResponse = {
-             status: 'success',
-             data: [
-               {title: '我的 GitHub', url:'https://github.com', description: '查看我的開源專案與程式碼庫', imageUrl: ''},
-               {title: '攝影作品集', url:'#', description: '街頭攝影與風景紀錄', imageUrl: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80'}
-             ],
-             settings: {
-               site_title: 'Alex Chen',
-               site_subtitle: 'Developer, Designer, Creator', // 用於打字機
-               bio_text: 'I build pixel-perfect, engaging, and accessible digital experiences.',
-               github_username: 'google',
-               avatar_url: 'https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=1e293b'
-             }
-          };
-          return {
-             getData: () => cb(mockResponse.data),
-             getSettingsMap: () => cb(mockResponse.settings)
-          }
-        }
-      }}};
-    }
+    // 您的 GAS API 網址
+    const API_URL = "https://script.google.com/macros/s/AKfycbw1J5DNcuCTfTGeQXhosPZYOW0MAfXDCNBHIi7rQTQMw7Nrfieuc4XEw0diuQkQ6XdUPg/exec";
   </script>
+  <!-- ======================================================= -->
+
+  <!-- 1. 閱讀進度條 -->
+  <div id="scroll-progress"></div>
+
+  <!-- 2. 自定義游標 -->
+  <div class="cursor-dot hidden md:block"></div>
+  <div class="cursor-outline hidden md:block"></div>
+
+  <!-- 星空背景 Canvas -->
+  <canvas id="star-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-40"></canvas>
 
   <main class="relative z-10 max-w-5xl mx-auto px-6 py-20">
     
@@ -107,8 +133,7 @@
     <div class="flex flex-col-reverse md:flex-row items-center justify-between mb-24 gap-12 animate-fade-in-up">
       <div class="text-center md:text-left flex-1">
         
-        <!-- 狀態標籤 -->
-        <div class="inline-flex items-center gap-2 px-3 py-1 mb-6 text-xs font-mono font-bold tracking-wider text-emerald-400 bg-emerald-900/20 rounded-full border border-emerald-500/20 backdrop-blur-sm">
+        <div class="inline-flex items-center gap-2 px-3 py-1 mb-6 text-xs font-mono font-bold tracking-wider text-emerald-400 bg-emerald-900/20 rounded-full border border-emerald-500/20 backdrop-blur-sm cursor-hover">
           <span class="relative flex h-2 w-2">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -121,50 +146,52 @@
           <span id="site-title" class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Loading...</span>
         </h1>
         
-        <!-- 2. 打字機特效 -->
+        <!-- 打字機特效 -->
         <div class="h-8 mb-8 flex items-center justify-center md:justify-start">
           <span class="text-xl md:text-2xl font-mono text-slate-400">> I am a </span>
           <span id="typewriter" class="text-xl md:text-2xl font-mono text-emerald-400 ml-2 font-bold typing-cursor"></span>
         </div>
         
         <p id="bio-text" class="text-lg text-slate-400 mb-8 max-w-lg leading-relaxed whitespace-pre-line">
-          Loading profile...
+          Fetching data from Google Sheets...
         </p>
 
         <!-- 社群連結 -->
         <div id="social-links" class="flex gap-6 justify-center md:justify-start">
-          <!-- Social Icons will be injected here -->
+          <!-- Social Icons injected here -->
         </div>
       </div>
 
       <!-- Avatar -->
-      <div class="relative group">
-         <!-- 背景光暈 -->
+      <div class="relative group cursor-hover">
          <div class="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
          <div class="relative w-64 h-64 md:w-80 md:h-80 bg-slate-900 rounded-full border-4 border-slate-800 overflow-hidden shadow-2xl">
-            <img id="avatar-img" src="https://via.placeholder.com/300" class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110">
+            <img id="avatar-img" src="https://via.placeholder.com/300?text=Loading" class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110">
          </div>
       </div>
     </div>
 
-    <!-- 3. 卡片連結區 (含 Tilt 特效) -->
+    <!-- 卡片連結區 -->
     <div class="mb-24">
       <h2 class="text-2xl font-bold text-white mb-8 flex items-center gap-3">
         <i class="fas fa-layer-group text-emerald-500"></i> Featured Links
       </h2>
       
       <div id="links-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="col-span-full text-center py-20"><div class="animate-spin w-8 h-8 border-4 border-emerald-500 rounded-full border-t-transparent inline-block"></div></div>
+        <div class="col-span-full text-center py-20">
+          <div class="animate-spin w-8 h-8 border-4 border-emerald-500 rounded-full border-t-transparent inline-block"></div>
+          <p class="text-slate-500 mt-4 text-sm">Connecting to backend...</p>
+        </div>
       </div>
     </div>
 
-    <!-- 4. 無限滾動技能牆 -->
+    <!-- 無限滾動技能牆 -->
     <div class="mb-20">
       <h2 class="text-sm font-bold text-slate-500 uppercase tracking-widest text-center mb-8">Technologies & Tools</h2>
       <div class="marquee-container overflow-hidden relative w-full">
         <div class="marquee-content flex gap-12 w-max items-center opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
-          <!-- 這裡重複兩組圖標以實現無縫滾動 -->
-          <div class="flex gap-12 items-center text-4xl text-slate-400">
+          <!-- 重複兩組圖標 -->
+          <div class="flex gap-12 items-center text-4xl text-slate-400 cursor-hover">
             <i class="fab fa-html5 hover:text-orange-500 transition"></i>
             <i class="fab fa-css3-alt hover:text-blue-500 transition"></i>
             <i class="fab fa-js hover:text-yellow-400 transition"></i>
@@ -173,11 +200,9 @@
             <i class="fab fa-node hover:text-green-600 transition"></i>
             <i class="fab fa-python hover:text-yellow-300 transition"></i>
             <i class="fab fa-git-alt hover:text-orange-600 transition"></i>
-            <i class="fab fa-docker hover:text-blue-400 transition"></i>
-            <i class="fab fa-aws hover:text-orange-400 transition"></i>
           </div>
           <!-- 重複一次 -->
-          <div class="flex gap-12 items-center text-4xl text-slate-400">
+          <div class="flex gap-12 items-center text-4xl text-slate-400 cursor-hover">
             <i class="fab fa-html5 hover:text-orange-500 transition"></i>
             <i class="fab fa-css3-alt hover:text-blue-500 transition"></i>
             <i class="fab fa-js hover:text-yellow-400 transition"></i>
@@ -186,8 +211,6 @@
             <i class="fab fa-node hover:text-green-600 transition"></i>
             <i class="fab fa-python hover:text-yellow-300 transition"></i>
             <i class="fab fa-git-alt hover:text-orange-600 transition"></i>
-            <i class="fab fa-docker hover:text-blue-400 transition"></i>
-            <i class="fab fa-aws hover:text-orange-400 transition"></i>
           </div>
         </div>
       </div>
@@ -195,50 +218,156 @@
 
     <!-- Footer -->
     <footer class="text-center text-slate-600 text-sm pb-10 border-t border-slate-800/50 pt-8">
-      <p>&copy; <span id="year"></span> Designed with <i class="fas fa-heart text-red-500 mx-1"></i> using GAS & Tailwind.</p>
+      <p>&copy; <span id="year"></span> <span id="footer-name">Me</span>. Designed with <i class="fas fa-heart text-red-500 mx-1"></i></p>
     </footer>
 
   </main>
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
-
-    // 全域變數
-    let typingWords = ["Developer", "Designer"]; // 預設值，會被後台設定覆蓋
+    let typingWords = ["Developer", "Designer"]; 
     
     window.onload = function() {
-      initStarCanvas(); // 啟動背景
-      google.script.run.withSuccessHandler(renderSettings).getSettingsMap();
-      google.script.run.withSuccessHandler(renderLinks).getData();
+      initStarCanvas();
+      initCustomCursor();
+      initScrollProgress();
+      initClickEffect();
+      
+      // 獲取資料
+      fetchData();
     };
 
-    // --- 1. 渲染設定 & 啟動打字機 ---
+    async function fetchData() {
+      try {
+        const response = await fetch(`${API_URL}?type=api`);
+        const result = await response.json();
+        
+        if (result.status === 'success') {
+          renderSettings(result.settings);
+          renderLinks(result.data);
+        } else {
+          console.error("API Error:", result);
+          document.getElementById('bio-text').textContent = "Error loading data.";
+        }
+      } catch (error) {
+        console.error("Fetch Error:", error);
+        document.getElementById('bio-text').textContent = "Failed to connect to Google Sheets.\nPlease check your GAS deployment permissions (Anyone).";
+      }
+    }
+
+    // --- 酷東西 1: 自定義磁吸游標 ---
+    function initCustomCursor() {
+      const dot = document.querySelector('.cursor-dot');
+      const outline = document.querySelector('.cursor-outline');
+      
+      window.addEventListener('mousemove', (e) => {
+        const posX = e.clientX;
+        const posY = e.clientY;
+        
+        dot.style.left = `${posX}px`;
+        dot.style.top = `${posY}px`;
+        
+        outline.animate({
+          left: `${posX}px`,
+          top: `${posY}px`
+        }, { duration: 500, fill: "forwards" });
+      });
+
+      const observer = new MutationObserver((mutations) => {
+         mutations.forEach((mutation) => {
+           if (mutation.addedNodes.length) {
+             attachHoverEvents(document.querySelectorAll('a, button, .cursor-hover'));
+           }
+         });
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+
+      function attachHoverEvents(elements) {
+        elements.forEach(el => {
+          el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+          el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+        });
+      }
+      attachHoverEvents(document.querySelectorAll('a, button, .cursor-hover'));
+    }
+
+    // --- 酷東西 2: 閱讀進度條 ---
+    function initScrollProgress() {
+      const progressBar = document.getElementById('scroll-progress');
+      window.addEventListener('scroll', () => {
+        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (scrollTop / scrollHeight) * 100;
+        progressBar.style.width = `${scrolled}%`;
+      });
+    }
+
+    // --- 酷東西 3: 點擊粒子特效 ---
+    function initClickEffect() {
+      window.addEventListener('click', (e) => {
+        const particleCount = 8;
+        for (let i = 0; i < particleCount; i++) {
+          createParticle(e.clientX, e.clientY);
+        }
+      });
+    }
+
+    function createParticle(x, y) {
+      const particle = document.createElement('div');
+      particle.classList.add('click-particle');
+      document.body.appendChild(particle);
+
+      const size = Math.random() * 5 + 2;
+      const destinationX = (Math.random() - 0.5) * 100;
+      const destinationY = (Math.random() - 0.5) * 100;
+      const color = Math.random() > 0.5 ? '#10b981' : '#3b82f6';
+
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+      particle.style.background = color;
+      particle.style.left = `${x}px`;
+      particle.style.top = `${y}px`;
+
+      const animation = particle.animate([
+        { transform: 'translate(-50%, -50%) translate(0, 0)', opacity: 1 },
+        { transform: `translate(-50%, -50%) translate(${destinationX}px, ${destinationY}px)`, opacity: 0 }
+      ], {
+        duration: 500 + Math.random() * 500,
+        easing: 'cubic-bezier(0, .9, .57, 1)',
+        delay: Math.random() * 100
+      });
+
+      animation.onfinish = () => {
+        particle.remove();
+      };
+    }
+
+    // --- 渲染設定 ---
     function renderSettings(s) {
       if(!s) return;
       document.title = s.site_title || 'Portfolio';
       document.getElementById('site-title').textContent = s.site_title || 'User';
+      document.getElementById('footer-name').textContent = s.site_title || 'Me';
       document.getElementById('bio-text').textContent = s.bio_text || '';
       
       if(s.avatar_url) document.getElementById('avatar-img').src = s.avatar_url;
 
-      // 解析副標題作為打字機內容 (以逗號分隔)
       if (s.site_subtitle) {
         typingWords = s.site_subtitle.split(',').map(w => w.trim());
       }
-      startTypewriter(); // 啟動打字機
+      startTypewriter();
 
-      // Render Social Icons
       const socialContainer = document.getElementById('social-links');
       let html = '';
-      if(s.github_username) html += `<a href="https://github.com/${s.github_username}" target="_blank" class="text-slate-400 hover:text-white transition transform hover:scale-125 text-2xl"><i class="fab fa-github"></i></a>`;
-      if(s.instagram_url) html += `<a href="${s.instagram_url}" target="_blank" class="text-slate-400 hover:text-pink-500 transition transform hover:scale-125 text-2xl"><i class="fab fa-instagram"></i></a>`;
-      if(s.twitter_url) html += `<a href="${s.twitter_url}" target="_blank" class="text-slate-400 hover:text-blue-400 transition transform hover:scale-125 text-2xl"><i class="fab fa-twitter"></i></a>`;
-      if(s.linkedin_url) html += `<a href="${s.linkedin_url}" target="_blank" class="text-slate-400 hover:text-blue-600 transition transform hover:scale-125 text-2xl"><i class="fab fa-linkedin"></i></a>`;
+      if(s.github_username) html += `<a href="https://github.com/${s.github_username}" target="_blank" class="text-slate-400 hover:text-white transition transform hover:scale-125 text-2xl cursor-hover"><i class="fab fa-github"></i></a>`;
+      if(s.instagram_url) html += `<a href="${s.instagram_url}" target="_blank" class="text-slate-400 hover:text-pink-500 transition transform hover:scale-125 text-2xl cursor-hover"><i class="fab fa-instagram"></i></a>`;
+      if(s.twitter_url) html += `<a href="${s.twitter_url}" target="_blank" class="text-slate-400 hover:text-blue-400 transition transform hover:scale-125 text-2xl cursor-hover"><i class="fab fa-twitter"></i></a>`;
+      if(s.linkedin_url) html += `<a href="${s.linkedin_url}" target="_blank" class="text-slate-400 hover:text-blue-600 transition transform hover:scale-125 text-2xl cursor-hover"><i class="fab fa-linkedin"></i></a>`;
       
       socialContainer.innerHTML = html;
     }
 
-    // --- 2. 渲染連結 (含 3D Tilt) ---
+    // --- 渲染連結 ---
     function renderLinks(data) {
       const container = document.getElementById('links-container');
       container.innerHTML = '';
@@ -253,7 +382,7 @@
         const html = `
           <a href="${item.url}" target="_blank" 
              data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2"
-             class="js-tilt group relative flex flex-col md:flex-row bg-slate-900/50 backdrop-blur-md border border-slate-800/60 rounded-2xl overflow-hidden hover:border-emerald-500/50 hover:shadow-2xl hover:shadow-emerald-500/10 transition-all duration-300 animate-fade-in-up" 
+             class="js-tilt group relative flex flex-col md:flex-row bg-slate-900/50 backdrop-blur-md border border-slate-800/60 rounded-2xl overflow-hidden hover:border-emerald-500/50 hover:shadow-2xl hover:shadow-emerald-500/10 transition-all duration-300 animate-fade-in-up cursor-hover" 
              style="animation-delay: ${delay}ms; transform-style: preserve-3d;">
             
             <div class="md:w-2/5 h-48 md:h-auto relative overflow-hidden">
@@ -275,13 +404,12 @@
         container.insertAdjacentHTML('beforeend', html);
       });
 
-      // 初始化 Vanilla Tilt
       if (typeof VanillaTilt !== 'undefined') {
         VanillaTilt.init(document.querySelectorAll(".js-tilt"));
       }
     }
 
-    // --- 3. 打字機邏輯 ---
+    // --- 打字機邏輯 ---
     function startTypewriter() {
       const el = document.getElementById('typewriter');
       let wordIndex = 0;
@@ -305,7 +433,7 @@
 
         if (!isDeleting && charIndex === currentWord.length) {
           isDeleting = true;
-          typeSpeed = 2000; // 停頓
+          typeSpeed = 2000; 
         } else if (isDeleting && charIndex === 0) {
           isDeleting = false;
           wordIndex = (wordIndex + 1) % typingWords.length;
@@ -316,7 +444,7 @@
       type();
     }
 
-    // --- 4. Canvas 星空背景邏輯 ---
+    // --- Canvas 星空背景 ---
     function initStarCanvas() {
       const canvas = document.getElementById('star-canvas');
       const ctx = canvas.getContext('2d');
@@ -329,13 +457,13 @@
 
       function createStars() {
         stars = [];
-        const count = Math.floor((width * height) / 15000); // 密度
+        const count = Math.floor((width * height) / 15000); 
         for (let i = 0; i < count; i++) {
           stars.push({
             x: Math.random() * width,
             y: Math.random() * height,
             radius: Math.random() * 1.5 + 0.5,
-            vx: (Math.random() - 0.5) * 0.2, // 速度
+            vx: (Math.random() - 0.5) * 0.2, 
             vy: (Math.random() - 0.5) * 0.2,
             alpha: Math.random()
           });
@@ -349,18 +477,15 @@
           star.x += star.vx;
           star.y += star.vy;
 
-          // 邊界反彈
           if (star.x < 0 || star.x > width) star.vx *= -1;
           if (star.y < 0 || star.y > height) star.vy *= -1;
 
-          // 繪製
           ctx.beginPath();
           ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
           ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha * 0.5})`;
           ctx.fill();
         });
 
-        // 簡單連線 (當距離近時)
         for (let i = 0; i < stars.length; i++) {
           for (let j = i + 1; j < stars.length; j++) {
             const dx = stars[i].x - stars[j].x;
@@ -369,7 +494,7 @@
             
             if (dist < 100) {
               ctx.beginPath();
-              ctx.strokeStyle = `rgba(16, 185, 129, ${0.1 - dist/1000})`; // Emerald 線條
+              ctx.strokeStyle = `rgba(16, 185, 129, ${0.1 - dist/1000})`; 
               ctx.lineWidth = 0.5;
               ctx.moveTo(stars[i].x, stars[i].y);
               ctx.lineTo(stars[j].x, stars[j].y);
