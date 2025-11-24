@@ -5,45 +5,93 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portfolio</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Vanilla Tilt (3D 卡片特效) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: { sans: ['Noto Sans TC', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
-          animation: { 'fade-in-up': 'fadeInUp 0.8s ease-out forwards' },
-          keyframes: { fadeInUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } } }
+          animation: { 
+            'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+            'cursor': 'cursor .75s step-end infinite'
+          },
+          keyframes: { 
+            fadeInUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+            cursor: { '0%, 100%': { borderColor: 'transparent' }, '50%': { borderColor: '#10b981' } }
+          }
         }
       }
     }
   </script>
-</head>
-<body class="bg-slate-950 text-slate-200 font-sans min-h-screen">
 
-  <!-- 模擬器 -->
+  <style>
+    /* 隱藏捲軸但保留功能 */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    
+    /* 技能跑馬燈動畫 */
+    .marquee-container {
+      mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    }
+    .marquee-content {
+      animation: scroll 30s linear infinite;
+    }
+    @keyframes scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    
+    /* 打字機游標 */
+    .typing-cursor::after {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 24px;
+      background-color: #10b981;
+      margin-left: 4px;
+      vertical-align: middle;
+      animation: blink 1s infinite;
+    }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-200 font-sans min-h-screen relative overflow-x-hidden selection:bg-emerald-500 selection:text-white">
+
+  <!-- 1. 動態星空背景 Canvas -->
+  <canvas id="star-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-40"></canvas>
+
+  <!-- 模擬器 (GAS 環境檢查) -->
   <script>
     if (typeof google === 'undefined') {
       window.google = { script: { run: {
         withSuccessHandler: (cb) => {
-          // 回傳 API 格式的結構
           const mockResponse = {
              status: 'success',
              data: [
-               {title: '範例專案', url:'#', description: '這是預覽模式', imageUrl: ''}
+               {title: '我的 GitHub', url:'https://github.com', description: '查看我的開源專案與程式碼庫', imageUrl: ''},
+               {title: '攝影作品集', url:'#', description: '街頭攝影與風景紀錄', imageUrl: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80'}
              ],
              settings: {
-               site_title: 'Preview User',
-               site_subtitle: 'Full Stack Dev',
-               bio_text: '這是預覽模式的自我介紹...',
-               github_username: 'google'
+               site_title: 'Alex Chen',
+               site_subtitle: 'Developer, Designer, Creator', // 用於打字機
+               bio_text: 'I build pixel-perfect, engaging, and accessible digital experiences.',
+               github_username: 'google',
+               avatar_url: 'https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=1e293b'
              }
           };
-          // 模擬 .getData() 的行為，這裡稍微 tricky 因為後端現在 doGet api 模式是回傳 json string
-          // 但如果是 GAS 內部直接呼叫，我們通常分開寫。
-          // 為了相容，我們假設前端呼叫的是分別的函數
           return {
              getData: () => cb(mockResponse.data),
              getSettingsMap: () => cb(mockResponse.settings)
@@ -53,68 +101,144 @@
     }
   </script>
 
-  <main class="max-w-5xl mx-auto px-6 py-20">
+  <main class="relative z-10 max-w-5xl mx-auto px-6 py-20">
     
-    <!-- Header -->
-    <div class="flex flex-col-reverse md:flex-row items-center justify-between mb-20 gap-10 animate-fade-in-up">
+    <!-- Header 區域 -->
+    <div class="flex flex-col-reverse md:flex-row items-center justify-between mb-24 gap-12 animate-fade-in-up">
       <div class="text-center md:text-left flex-1">
-        <div class="inline-block px-3 py-1 mb-4 text-xs font-mono font-bold tracking-wider text-emerald-400 bg-emerald-900/30 rounded-full border border-emerald-500/30">
-          <span id="subtitle">WELCOME</span>
+        
+        <!-- 狀態標籤 -->
+        <div class="inline-flex items-center gap-2 px-3 py-1 mb-6 text-xs font-mono font-bold tracking-wider text-emerald-400 bg-emerald-900/20 rounded-full border border-emerald-500/20 backdrop-blur-sm">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+          AVAILABLE FOR HIRE
         </div>
-        <h1 class="text-5xl md:text-6xl font-bold tracking-tight text-white mb-6">
+
+        <h1 class="text-5xl md:text-7xl font-bold tracking-tight text-white mb-4">
           Hello, I'm <br/>
-          <span id="site-title" class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-emerald-400">Loading...</span>
+          <span id="site-title" class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Loading...</span>
         </h1>
+        
+        <!-- 2. 打字機特效 -->
+        <div class="h-8 mb-8 flex items-center justify-center md:justify-start">
+          <span class="text-xl md:text-2xl font-mono text-slate-400">> I am a </span>
+          <span id="typewriter" class="text-xl md:text-2xl font-mono text-emerald-400 ml-2 font-bold typing-cursor"></span>
+        </div>
         
         <p id="bio-text" class="text-lg text-slate-400 mb-8 max-w-lg leading-relaxed whitespace-pre-line">
           Loading profile...
         </p>
 
-        <div id="social-links" class="flex gap-5 justify-center md:justify-start text-2xl text-slate-400">
+        <!-- 社群連結 -->
+        <div id="social-links" class="flex gap-6 justify-center md:justify-start">
           <!-- Social Icons will be injected here -->
         </div>
       </div>
 
       <!-- Avatar -->
-      <div class="relative w-64 h-64 md:w-80 md:h-80 bg-slate-900 rounded-full md:rounded-2xl border-4 border-slate-800 overflow-hidden shadow-2xl">
-         <img id="avatar-img" src="https://api.dicebear.com/7.x/notionists/svg?seed=Felix&backgroundColor=1e293b" class="w-full h-full object-cover">
+      <div class="relative group">
+         <!-- 背景光暈 -->
+         <div class="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+         <div class="relative w-64 h-64 md:w-80 md:h-80 bg-slate-900 rounded-full border-4 border-slate-800 overflow-hidden shadow-2xl">
+            <img id="avatar-img" src="https://via.placeholder.com/300" class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110">
+         </div>
       </div>
     </div>
 
-    <!-- Content Grid -->
-    <div id="links-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="col-span-full text-center py-20"><div class="animate-spin w-8 h-8 border-4 border-indigo-500 rounded-full border-t-transparent inline-block"></div></div>
+    <!-- 3. 卡片連結區 (含 Tilt 特效) -->
+    <div class="mb-24">
+      <h2 class="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+        <i class="fas fa-layer-group text-emerald-500"></i> Featured Links
+      </h2>
+      
+      <div id="links-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="col-span-full text-center py-20"><div class="animate-spin w-8 h-8 border-4 border-emerald-500 rounded-full border-t-transparent inline-block"></div></div>
+      </div>
     </div>
+
+    <!-- 4. 無限滾動技能牆 -->
+    <div class="mb-20">
+      <h2 class="text-sm font-bold text-slate-500 uppercase tracking-widest text-center mb-8">Technologies & Tools</h2>
+      <div class="marquee-container overflow-hidden relative w-full">
+        <div class="marquee-content flex gap-12 w-max items-center opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
+          <!-- 這裡重複兩組圖標以實現無縫滾動 -->
+          <div class="flex gap-12 items-center text-4xl text-slate-400">
+            <i class="fab fa-html5 hover:text-orange-500 transition"></i>
+            <i class="fab fa-css3-alt hover:text-blue-500 transition"></i>
+            <i class="fab fa-js hover:text-yellow-400 transition"></i>
+            <i class="fab fa-react hover:text-cyan-400 transition"></i>
+            <i class="fab fa-vuejs hover:text-green-500 transition"></i>
+            <i class="fab fa-node hover:text-green-600 transition"></i>
+            <i class="fab fa-python hover:text-yellow-300 transition"></i>
+            <i class="fab fa-git-alt hover:text-orange-600 transition"></i>
+            <i class="fab fa-docker hover:text-blue-400 transition"></i>
+            <i class="fab fa-aws hover:text-orange-400 transition"></i>
+          </div>
+          <!-- 重複一次 -->
+          <div class="flex gap-12 items-center text-4xl text-slate-400">
+            <i class="fab fa-html5 hover:text-orange-500 transition"></i>
+            <i class="fab fa-css3-alt hover:text-blue-500 transition"></i>
+            <i class="fab fa-js hover:text-yellow-400 transition"></i>
+            <i class="fab fa-react hover:text-cyan-400 transition"></i>
+            <i class="fab fa-vuejs hover:text-green-500 transition"></i>
+            <i class="fab fa-node hover:text-green-600 transition"></i>
+            <i class="fab fa-python hover:text-yellow-300 transition"></i>
+            <i class="fab fa-git-alt hover:text-orange-600 transition"></i>
+            <i class="fab fa-docker hover:text-blue-400 transition"></i>
+            <i class="fab fa-aws hover:text-orange-400 transition"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center text-slate-600 text-sm pb-10 border-t border-slate-800/50 pt-8">
+      <p>&copy; <span id="year"></span> Designed with <i class="fas fa-heart text-red-500 mx-1"></i> using GAS & Tailwind.</p>
+    </footer>
 
   </main>
 
   <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // 全域變數
+    let typingWords = ["Developer", "Designer"]; // 預設值，會被後台設定覆蓋
+    
     window.onload = function() {
-      // 分別載入設定與資料
+      initStarCanvas(); // 啟動背景
       google.script.run.withSuccessHandler(renderSettings).getSettingsMap();
       google.script.run.withSuccessHandler(renderLinks).getData();
     };
 
+    // --- 1. 渲染設定 & 啟動打字機 ---
     function renderSettings(s) {
       if(!s) return;
       document.title = s.site_title || 'Portfolio';
-      document.getElementById('site-title').textContent = s.site_title || 'Alex Chen';
-      document.getElementById('subtitle').textContent = s.site_subtitle || 'PORTFOLIO';
-      document.getElementById('bio-text').textContent = s.bio_text || 'Welcome to my page.';
+      document.getElementById('site-title').textContent = s.site_title || 'User';
+      document.getElementById('bio-text').textContent = s.bio_text || '';
       
       if(s.avatar_url) document.getElementById('avatar-img').src = s.avatar_url;
+
+      // 解析副標題作為打字機內容 (以逗號分隔)
+      if (s.site_subtitle) {
+        typingWords = s.site_subtitle.split(',').map(w => w.trim());
+      }
+      startTypewriter(); // 啟動打字機
 
       // Render Social Icons
       const socialContainer = document.getElementById('social-links');
       let html = '';
-      if(s.github_username) html += `<a href="https://github.com/${s.github_username}" target="_blank" class="hover:text-white transition transform hover:scale-110"><i class="fab fa-github"></i></a>`;
-      if(s.instagram_url) html += `<a href="${s.instagram_url}" target="_blank" class="hover:text-pink-500 transition transform hover:scale-110"><i class="fab fa-instagram"></i></a>`;
-      if(s.twitter_url) html += `<a href="${s.twitter_url}" target="_blank" class="hover:text-blue-400 transition transform hover:scale-110"><i class="fab fa-twitter"></i></a>`;
-      if(s.linkedin_url) html += `<a href="${s.linkedin_url}" target="_blank" class="hover:text-blue-600 transition transform hover:scale-110"><i class="fab fa-linkedin"></i></a>`;
+      if(s.github_username) html += `<a href="https://github.com/${s.github_username}" target="_blank" class="text-slate-400 hover:text-white transition transform hover:scale-125 text-2xl"><i class="fab fa-github"></i></a>`;
+      if(s.instagram_url) html += `<a href="${s.instagram_url}" target="_blank" class="text-slate-400 hover:text-pink-500 transition transform hover:scale-125 text-2xl"><i class="fab fa-instagram"></i></a>`;
+      if(s.twitter_url) html += `<a href="${s.twitter_url}" target="_blank" class="text-slate-400 hover:text-blue-400 transition transform hover:scale-125 text-2xl"><i class="fab fa-twitter"></i></a>`;
+      if(s.linkedin_url) html += `<a href="${s.linkedin_url}" target="_blank" class="text-slate-400 hover:text-blue-600 transition transform hover:scale-125 text-2xl"><i class="fab fa-linkedin"></i></a>`;
       
       socialContainer.innerHTML = html;
     }
 
+    // --- 2. 渲染連結 (含 3D Tilt) ---
     function renderLinks(data) {
       const container = document.getElementById('links-container');
       container.innerHTML = '';
@@ -127,21 +251,140 @@
       data.forEach((item, idx) => {
         const delay = idx * 100;
         const html = `
-          <a href="${item.url}" target="_blank" class="group relative flex bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-indigo-500/50 hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-300 animate-fade-in-up" style="animation-delay: ${delay}ms">
-            <div class="w-1/3 min-w-[120px] relative overflow-hidden">
-               <img src="${item.imageUrl || 'https://via.placeholder.com/300x300?text=Link'}" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
+          <a href="${item.url}" target="_blank" 
+             data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2"
+             class="js-tilt group relative flex flex-col md:flex-row bg-slate-900/50 backdrop-blur-md border border-slate-800/60 rounded-2xl overflow-hidden hover:border-emerald-500/50 hover:shadow-2xl hover:shadow-emerald-500/10 transition-all duration-300 animate-fade-in-up" 
+             style="animation-delay: ${delay}ms; transform-style: preserve-3d;">
+            
+            <div class="md:w-2/5 h-48 md:h-auto relative overflow-hidden">
+               <div class="absolute inset-0 bg-slate-800 animate-pulse z-0"></div>
+               <img src="${item.imageUrl || 'https://via.placeholder.com/400x300?text=No+Image'}" 
+                    class="relative z-10 w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
+               <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent opacity-60 md:bg-gradient-to-r z-20"></div>
             </div>
-            <div class="flex-1 p-5 flex flex-col justify-center">
-              <h3 class="text-lg font-bold text-white group-hover:text-indigo-400 transition mb-2">${item.title}</h3>
-              <p class="text-slate-400 text-sm line-clamp-2">${item.description || ''}</p>
-            </div>
-            <div class="absolute top-4 right-4 text-slate-600 group-hover:text-white transition opacity-0 group-hover:opacity-100">
-               <i class="fas fa-external-link-alt"></i>
+            
+            <div class="flex-1 p-6 flex flex-col justify-center relative z-30" style="transform: translateZ(20px)">
+              <div class="flex justify-between items-start">
+                <h3 class="text-xl font-bold text-white group-hover:text-emerald-400 transition mb-2">${item.title}</h3>
+                <i class="fas fa-arrow-right text-emerald-500 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition"></i>
+              </div>
+              <p class="text-slate-400 text-sm line-clamp-2 leading-relaxed group-hover:text-slate-300 transition">${item.description || ''}</p>
             </div>
           </a>
         `;
         container.insertAdjacentHTML('beforeend', html);
       });
+
+      // 初始化 Vanilla Tilt
+      if (typeof VanillaTilt !== 'undefined') {
+        VanillaTilt.init(document.querySelectorAll(".js-tilt"));
+      }
+    }
+
+    // --- 3. 打字機邏輯 ---
+    function startTypewriter() {
+      const el = document.getElementById('typewriter');
+      let wordIndex = 0;
+      let charIndex = 0;
+      let isDeleting = false;
+      let typeSpeed = 100;
+
+      function type() {
+        if (typingWords.length === 0) return;
+        const currentWord = typingWords[wordIndex];
+        
+        if (isDeleting) {
+          el.textContent = currentWord.substring(0, charIndex - 1);
+          charIndex--;
+          typeSpeed = 50;
+        } else {
+          el.textContent = currentWord.substring(0, charIndex + 1);
+          charIndex++;
+          typeSpeed = 100;
+        }
+
+        if (!isDeleting && charIndex === currentWord.length) {
+          isDeleting = true;
+          typeSpeed = 2000; // 停頓
+        } else if (isDeleting && charIndex === 0) {
+          isDeleting = false;
+          wordIndex = (wordIndex + 1) % typingWords.length;
+          typeSpeed = 500;
+        }
+        setTimeout(type, typeSpeed);
+      }
+      type();
+    }
+
+    // --- 4. Canvas 星空背景邏輯 ---
+    function initStarCanvas() {
+      const canvas = document.getElementById('star-canvas');
+      const ctx = canvas.getContext('2d');
+      let width, height, stars = [];
+
+      function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      }
+
+      function createStars() {
+        stars = [];
+        const count = Math.floor((width * height) / 15000); // 密度
+        for (let i = 0; i < count; i++) {
+          stars.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            radius: Math.random() * 1.5 + 0.5,
+            vx: (Math.random() - 0.5) * 0.2, // 速度
+            vy: (Math.random() - 0.5) * 0.2,
+            alpha: Math.random()
+          });
+        }
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, width, height);
+        
+        stars.forEach(star => {
+          star.x += star.vx;
+          star.y += star.vy;
+
+          // 邊界反彈
+          if (star.x < 0 || star.x > width) star.vx *= -1;
+          if (star.y < 0 || star.y > height) star.vy *= -1;
+
+          // 繪製
+          ctx.beginPath();
+          ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha * 0.5})`;
+          ctx.fill();
+        });
+
+        // 簡單連線 (當距離近時)
+        for (let i = 0; i < stars.length; i++) {
+          for (let j = i + 1; j < stars.length; j++) {
+            const dx = stars[i].x - stars[j].x;
+            const dy = stars[i].y - stars[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            
+            if (dist < 100) {
+              ctx.beginPath();
+              ctx.strokeStyle = `rgba(16, 185, 129, ${0.1 - dist/1000})`; // Emerald 線條
+              ctx.lineWidth = 0.5;
+              ctx.moveTo(stars[i].x, stars[i].y);
+              ctx.lineTo(stars[j].x, stars[j].y);
+              ctx.stroke();
+            }
+          }
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      window.addEventListener('resize', () => { resize(); createStars(); });
+      resize();
+      createStars();
+      animate();
     }
   </script>
 </body>
