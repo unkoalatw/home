@@ -5,16 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Portfolio</title>
   
-  <!-- ★★★ 路徑修正：根據您的截圖，CSS 在同一層目錄 ★★★ -->
+  <!-- ★★★ 連結您的本地 CSS ★★★ -->
   <link href="./output.css" rel="stylesheet">
   
-  <!-- Fonts -->
+  <!-- 字體 -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
   
-  <!-- Icons -->
+  <!-- 圖示庫 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- Libraries -->
+  <!-- 函式庫 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 </head>
@@ -44,11 +44,13 @@
   
   <!-- UI 元件 -->
   <div id="scroll-progress" class="fixed top-0 left-0 h-[2px] bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-500 z-50 transition-all duration-100" style="width: 0%"></div>
+  
+  <!-- 游標 (僅電腦版顯示) -->
   <div class="cursor-dot hidden md:block"></div>
   <div class="cursor-outline hidden md:block"></div>
 
   <!-- 隱藏終端機 -->
-  <div id="terminal-overlay" class="fixed top-0 left-0 w-full h-1/2 bg-[#0f172a]/95 backdrop-blur-xl z-[10000] border-b border-indigo-500/30 shadow-2xl flex flex-col p-6 font-mono text-sm text-indigo-300 overflow-hidden">
+  <div id="terminal-overlay" class="fixed top-0 left-0 w-full h-1/2 bg-[#0f172a]/95 backdrop-blur-xl z-[10000] border-b border-indigo-500/30 shadow-2xl flex flex-col p-6 font-mono text-sm text-indigo-300 overflow-hidden transition-transform duration-300 -translate-y-full">
     <div class="flex justify-between items-center mb-4 border-b border-indigo-500/20 pb-2 select-none">
       <span class="flex items-center gap-2"><i class="fas fa-terminal"></i> SECRET_TERMINAL_ACCESS</span>
       <span class="text-slate-500 text-xs">Press 'Ctrl + /' to close</span>
@@ -83,7 +85,7 @@
   </div>
 
   <!-- 自定義右鍵選單 -->
- <div id="context-menu">
+  <div id="context-menu">
     <div class="ctx-item cursor-hover" onclick="location.reload()">
       <i class="fas fa-sync-alt w-4"></i> Reload System
       <span class="ctx-shortcut">F5</span>
@@ -99,10 +101,9 @@
     <div class="ctx-item cursor-hover" onclick="toggleSound()">
       <i class="fas fa-music w-4"></i> Toggle Sound
     </div>
-    <!-- ★★★ 新增提示：讓使用者知道如何叫出原選單 ★★★ -->
     <div class="ctx-divider"></div>
     <div class="text-[10px] text-slate-500 px-3 py-1 text-center opacity-60 select-none">
-      Hold <span class="text-slate-300 font-bold">Shift</span> + Right Click for Default Menu
+      Hold <span class="text-slate-300 font-bold">Shift</span> + Right Click for Default
     </div>
   </div>
 
@@ -120,7 +121,7 @@
         <div class="space-y-4">
           <h1 class="text-4xl md:text-7xl lg:text-8xl font-extrabold tracking-tight text-white leading-tight">
             Hello, I'm <br/>
-            <span id="site-title" class="hack-text text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-emerald-400 cursor-hover">Loading...</span>
+            <span id="site-title" class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-emerald-400 cursor-hover">Loading...</span>
           </h1>
           <div class="text-lg md:text-2xl text-slate-400 font-light h-8 font-mono">
             > I am a <span id="typewriter" class="gradient-text-anim font-bold typing-cursor"></span>
@@ -166,6 +167,7 @@
             <i class="fab fa-python hover:text-yellow-300 transition duration-300 hover:-translate-y-2 cursor-hover"></i>
             <i class="fab fa-git-alt hover:text-orange-600 transition duration-300 hover:-translate-y-2 cursor-hover"></i>
           </div>
+          <!-- 重複 -->
           <div class="flex gap-16 items-center text-4xl md:text-5xl text-slate-600">
             <i class="fab fa-html5 hover:text-orange-500 transition duration-300 hover:-translate-y-2 cursor-hover"></i>
             <i class="fab fa-css3-alt hover:text-blue-500 transition duration-300 hover:-translate-y-2 cursor-hover"></i>
@@ -295,7 +297,7 @@
       if(!isMobile) initSpotlightCards();
     }
 
-    // Gravity
+    // Gravity Logic
     let engine, runner, gravityTimeout;
     let isGravityActive = false;
     function initGravity() {
@@ -308,6 +310,7 @@
       btn.onclick = stopGravity;
       document.body.appendChild(btn);
       gravityTimeout = setTimeout(stopGravity, 30000);
+      
       const Engine = Matter.Engine, World = Matter.World, Bodies = Matter.Bodies, Mouse = Matter.Mouse, MouseConstraint = Matter.MouseConstraint;
       engine = Engine.create();
       const elements = document.querySelectorAll('.physics-body');
@@ -319,14 +322,18 @@
         body.domElement = el; bodies.push(body);
         el.style.position = 'fixed'; el.style.width = rect.width + 'px'; el.style.height = rect.height + 'px'; el.style.zIndex = '9999'; el.style.left = '0'; el.style.top = '0'; el.style.transform = `translate(${rect.left}px, ${rect.top}px)`;
       });
+      
       const wallOptions = { isStatic: true, render: { visible: false } };
-      let ground = Bodies.rectangle(window.innerWidth / 2, window.innerHeight + 50, window.innerWidth, 100, wallOptions);
-      let wallL = Bodies.rectangle(-50, window.innerHeight / 2, 100, window.innerHeight, wallOptions);
-      let wallR = Bodies.rectangle(window.innerWidth + 50, window.innerHeight / 2, 100, window.innerHeight, wallOptions);
-      let ceiling = Bodies.rectangle(window.innerWidth / 2, -500, window.innerWidth, 100, wallOptions);
+      const screenW = window.innerWidth; const screenH = window.innerHeight;
+      let ground = Bodies.rectangle(screenW / 2, screenH + 50, screenW, 100, wallOptions);
+      let wallL = Bodies.rectangle(-50, screenH / 2, 100, screenH, wallOptions);
+      let wallR = Bodies.rectangle(screenW + 50, screenH / 2, 100, screenH, wallOptions);
+      let ceiling = Bodies.rectangle(screenW / 2, -500, screenW, 100, wallOptions);
+      
       World.add(engine.world, [ground, wallL, wallR, ceiling, ...bodies]);
       runner = Matter.Runner.create();
       Matter.Runner.run(runner, engine);
+      
       function update() {
         if (!isGravityActive) return;
         bodies.forEach(b => {
@@ -340,6 +347,7 @@
         requestAnimationFrame(update);
       }
       requestAnimationFrame(update);
+      
       const mouseConstraint = MouseConstraint.create(engine, { element: document.body, mouse: Mouse.create(document.body) });
       World.add(engine.world, mouseConstraint);
     }
@@ -420,6 +428,7 @@
     function initContextMenu() {
       const menu = document.getElementById('context-menu');
       document.addEventListener('contextmenu', (e) => {
+        if (e.shiftKey) return; // Allow default menu
         e.preventDefault();
         const x = e.clientX; const y = e.clientY;
         const menuW = 200, menuH = 200;
@@ -442,8 +451,14 @@
     function toggleTerminal() {
       const overlay = document.getElementById('terminal-overlay');
       const input = document.getElementById('terminal-input');
-      overlay.classList.toggle('open');
-      if(overlay.classList.contains('open')) { input.focus(); if(!isMuted && audioCtx) playTone(200, 'square', 0.2); }
+      // 修正 class 操作
+      if(overlay.classList.contains('-translate-y-full')) {
+        overlay.classList.remove('-translate-y-full');
+        input.focus();
+        if(!isMuted && audioCtx) playTone(200, 'square', 0.2);
+      } else {
+        overlay.classList.add('-translate-y-full');
+      }
     }
 
     function playTone(f,t,d) {
@@ -456,7 +471,6 @@
 
     function initTerminal() {
       const overlay=document.getElementById('terminal-overlay'), input=document.getElementById('terminal-input'), out=document.getElementById('terminal-output');
-      let isOpen=false;
       document.addEventListener('keydown', e => { if(e.key === '/' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); toggleTerminal(); } });
       input.addEventListener('keydown', e => { if(e.key==='Enter') { const c=input.value; input.value=''; printLog(`user@port:~$ ${c}`); process(c.trim().toLowerCase()); } });
       function printLog(h) { const d=document.createElement('div'); d.innerHTML=h; out.appendChild(d); out.scrollTop=out.scrollHeight; }
@@ -497,5 +511,4 @@
     }
   </script>
 </body>
-
 </html>
