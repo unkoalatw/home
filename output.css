@@ -1340,6 +1340,10 @@ body {
   height: 1px;
 }
 
+.h-\[450px\] {
+  height: 450px;
+}
+
 .min-h-screen {
   min-height: 100vh;
 }
@@ -1379,6 +1383,10 @@ body {
 
 .w-px {
   width: 1px;
+}
+
+.w-80 {
+  width: 20rem;
 }
 
 .max-w-6xl {
@@ -1475,6 +1483,10 @@ body {
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
+}
+
+.resize {
+  resize: both;
 }
 
 .grid-cols-1 {
@@ -1887,6 +1899,10 @@ body {
   line-height: 1rem;
 }
 
+.text-\[9px\] {
+  font-size: 9px;
+}
+
 .font-bold {
   font-weight: 700;
 }
@@ -2003,6 +2019,10 @@ body {
 
 .opacity-75 {
   opacity: 0.75;
+}
+
+.opacity-70 {
+  opacity: 0.7;
 }
 
 .shadow-2xl {
@@ -2128,6 +2148,11 @@ body {
   color: transparent;
   background-size: 300% 100%;
   animation: gradient-x 8s ease infinite;
+}
+
+.hack-text {
+  font-family: JetBrains Mono, monospace;
+  letter-spacing: -0.025em;
 }
 
 .physics-body {
