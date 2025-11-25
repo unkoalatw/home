@@ -83,7 +83,7 @@
   </div>
 
   <!-- 自定義右鍵選單 -->
-  <div id="context-menu">
+ <div id="context-menu">
     <div class="ctx-item cursor-hover" onclick="location.reload()">
       <i class="fas fa-sync-alt w-4"></i> Reload System
       <span class="ctx-shortcut">F5</span>
@@ -98,6 +98,11 @@
     </div>
     <div class="ctx-item cursor-hover" onclick="toggleSound()">
       <i class="fas fa-music w-4"></i> Toggle Sound
+    </div>
+    <!-- ★★★ 新增提示：讓使用者知道如何叫出原選單 ★★★ -->
+    <div class="ctx-divider"></div>
+    <div class="text-[10px] text-slate-500 px-3 py-1 text-center opacity-60 select-none">
+      Hold <span class="text-slate-300 font-bold">Shift</span> + Right Click for Default Menu
     </div>
   </div>
 
@@ -492,4 +497,5 @@
     }
   </script>
 </body>
+
 </html>
