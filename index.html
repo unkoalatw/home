@@ -396,6 +396,7 @@
     function renderSettings(s) {
       if(!s) return;
       document.title = s.site_title || 'Portfolio';
+      
       const titleEl = document.getElementById('site-title');
       // 移除解碼特效相關邏輯
       titleEl.textContent = s.site_title || 'User';
@@ -411,10 +412,22 @@
       let html = '';
       const btnClass = "magnetic-btn w-12 h-12 rounded-full glass-card flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-hover text-xl";
       
-      if(s.github_username) html += `<a href="https://github.com/${s.github_username}" target="_blank" class="${btnClass}"><i class="fab fa-github"></i></a>`;
-      if(s.instagram_url) html += `<a href="${s.instagram_url}" target="_blank" class="${btnClass}"><i class="fab fa-instagram"></i></a>`;
-      if(s.twitter_url) html += `<a href="${s.twitter_url}" target="_blank" class="${btnClass}"><i class="fab fa-twitter"></i></a>`;
-      if(s.linkedin_url) html += `<a href="${s.linkedin_url}" target="_blank" class="${btnClass}"><i class="fab fa-linkedin"></i></a>`;
+      // 原有連結
+      if(s.github_username) html += `<a href="https://github.com/${s.github_username}" target="_blank" class="${btnClass}" title="GitHub"><i class="fab fa-github"></i></a>`;
+      if(s.instagram_url) html += `<a href="${s.instagram_url}" target="_blank" class="${btnClass}" title="Instagram"><i class="fab fa-instagram"></i></a>`;
+      if(s.twitter_url) html += `<a href="${s.twitter_url}" target="_blank" class="${btnClass}" title="Twitter"><i class="fab fa-twitter"></i></a>`;
+      if(s.linkedin_url) html += `<a href="${s.linkedin_url}" target="_blank" class="${btnClass}" title="LinkedIn"><i class="fab fa-linkedin"></i></a>`;
+      
+      // ★★★ 新增連結顯示邏輯 ★★★
+      if(s.facebook_url) html += `<a href="${s.facebook_url}" target="_blank" class="${btnClass}" title="Facebook"><i class="fab fa-facebook"></i></a>`;
+      if(s.youtube_url) html += `<a href="${s.youtube_url}" target="_blank" class="${btnClass}" title="YouTube"><i class="fab fa-youtube"></i></a>`;
+      
+      // Email 特別處理 mailto:
+      if(s.email_address) html += `<a href="mailto:${s.email_address}" class="${btnClass}" title="Email"><i class="fas fa-envelope"></i></a>`;
+      
+      // 個人網站
+      if(s.website_url) html += `<a href="${s.website_url}" target="_blank" class="${btnClass}" title="Website"><i class="fas fa-globe"></i></a>`;
+
       social.innerHTML = html;
       
       if(!isMobile) initMagneticButtons(); 
