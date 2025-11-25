@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Portfolio</title>
   
-  <!-- 連結本地 CSS -->
+  <!-- ★★★ 連結您的本地 CSS ★★★ -->
   <link href="./output.css" rel="stylesheet">
   
   <!-- 字體 -->
@@ -19,45 +19,24 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 
   <style>
-    /* 補丁樣式：新增的 Resize 與 Cookie 提示樣式 */
+    /* 額外補丁樣式 (尚未整合進 output.css 的部分) */
     
-    /* 調整手柄 (左上角) */
+    /* 聊天視窗調整手柄 */
     .resize-handle {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 20px;
-      height: 20px;
-      cursor: nwse-resize; /* 顯示對角線游標 */
-      z-index: 50;
+      position: absolute; top: 0; left: 0; width: 20px; height: 20px;
+      cursor: nwse-resize; z-index: 50;
     }
-    /* 手柄視覺指標 (一個小角標) */
     .resize-handle::after {
-      content: '';
-      position: absolute;
-      top: 6px;
-      left: 6px;
-      width: 8px;
-      height: 8px;
-      border-top: 2px solid rgba(255,255,255,0.3);
-      border-left: 2px solid rgba(255,255,255,0.3);
-      border-top-left-radius: 2px;
-      transition: border-color 0.3s;
+      content: ''; position: absolute; top: 6px; left: 6px; width: 8px; height: 8px;
+      border-top: 2px solid rgba(255,255,255,0.3); border-left: 2px solid rgba(255,255,255,0.3);
+      border-top-left-radius: 2px; transition: border-color 0.3s;
     }
-    .resize-handle:hover::after {
-      border-color: #10b981; /* Emerald */
-    }
+    .resize-handle:hover::after { border-color: #10b981; }
 
-    /* Cookie 提示橫幅 */
+    /* Cookie 提示 */
     .cookie-alert {
-      background: rgba(16, 185, 129, 0.1);
-      border-bottom: 1px solid rgba(16, 185, 129, 0.2);
-      font-size: 0.7rem;
-      color: #94a3b8;
-      padding: 8px 12px;
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
+      background: rgba(16, 185, 129, 0.1); border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+      font-size: 0.7rem; color: #94a3b8; padding: 8px 12px; display: flex; align-items: flex-start; gap: 8px;
       animation: fadeIn 0.5s ease;
     }
     .cookie-alert i { color: #10b981; margin-top: 2px; }
@@ -111,31 +90,24 @@
     </div>
   </div>
 
-  <!-- 卡片展開層 -->
+  <!-- 卡片展開層 (App Store 風格) -->
   <div id="card-overlay" class="card-overlay">
     <div class="card-expanded" id="expanded-content">
       <!-- JS 動態填入 -->
     </div>
   </div>
 
-  <!-- ★★★ 聊天視窗 (已升級：可調整大小) ★★★ -->
-  <!-- 移除 CSS class 中的固定寬高 (w-80 h-[450px])，改用 style 設定初始值，以便 JS 控制 -->
+  <!-- 聊天視窗 -->
   <div class="chat-window" id="chat-window" style="width: 320px; height: 450px;">
-    
-    <!-- 新增：調整手柄 -->
     <div id="chat-resize-handle" class="resize-handle" title="Drag to resize"></div>
-
     <div class="chat-header">
-      <div class="flex items-center gap-2 ml-4"> <!-- 增加左邊距避開手柄 -->
+      <div class="flex items-center gap-2 ml-4">
         <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
         <span class="font-bold text-emerald-400 text-sm">Live Chat</span>
       </div>
       <button onclick="toggleChat()" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button>
     </div>
-    
-    <!-- 新增：Cookie 提示容器 (由 JS 動態插入) -->
-    <div id="chat-notice-area"></div>
-
+    <div id="chat-notice-area"></div> <!-- Cookie Notice -->
     <div class="chat-messages" id="chat-messages">
       <div class="text-center text-xs text-slate-500 my-4">Start a conversation</div>
     </div>
@@ -145,7 +117,7 @@
     </div>
   </div>
 
-  <!-- 懸浮工具列 (Dock) -->
+  <!-- 懸浮工具列 (Dock) - 右側垂直 / 底部水平 -->
   <div class="floating-dock">
     <div class="dock-item" data-tooltip="HOME" onclick="window.scrollTo({top:0, behavior:'smooth'})">
       <i class="fas fa-home"></i>
@@ -156,6 +128,7 @@
     <div class="dock-item" data-tooltip="SKILLS" onclick="document.querySelector('.marquee-container').scrollIntoView({behavior:'smooth'})">
       <i class="fas fa-code"></i>
     </div>
+    <!-- 分隔線 -->
     <div class="w-px h-6 md:w-6 md:h-px bg-white/10 self-center mx-1 md:my-1 md:mx-0"></div>
 
     <div class="dock-item" data-tooltip="TERMINAL" onclick="toggleTerminal()">
@@ -213,6 +186,7 @@
             > I am a <span id="typewriter" class="gradient-text-anim font-bold typing-cursor"></span>
           </div>
         </div>
+        <!-- 換行支援 -->
         <p id="bio-text" class="text-base md:text-lg text-slate-400 max-w-lg mx-auto lg:mx-0 leading-relaxed whitespace-pre-line">Fetching profile data...</p>
         <div id="social-links" class="flex gap-6 justify-center lg:justify-start pt-4 physics-body flex-wrap"></div>
       </div>
@@ -225,7 +199,7 @@
       </div>
     </div>
 
-    <!-- 卡片連結區 -->
+    <!-- 卡片連結區 (單欄緊湊) -->
     <div class="mb-32 opacity-0 animate-fade-up" style="animation-delay: 0.4s;">
       <div class="flex items-center justify-between mb-8">
         <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight">Selected Work</h2>
@@ -253,7 +227,6 @@
             <i class="fab fa-python hover:text-yellow-300 transition duration-300 hover:-translate-y-2 cursor-hover"></i>
             <i class="fab fa-git-alt hover:text-orange-600 transition duration-300 hover:-translate-y-2 cursor-hover"></i>
           </div>
-          <!-- 重複 -->
           <div class="flex gap-16 items-center text-4xl md:text-5xl text-slate-600">
             <i class="fab fa-html5 hover:text-orange-500 transition duration-300 hover:-translate-y-2 cursor-hover"></i>
             <i class="fab fa-css3-alt hover:text-blue-500 transition duration-300 hover:-translate-y-2 cursor-hover"></i>
@@ -268,8 +241,15 @@
       </div>
     </div>
 
+    <!-- Footer 連結 -->
     <footer class="text-center text-slate-500 text-sm pb-10 border-t border-slate-800/30 pt-8 opacity-0 animate-fade-up" style="animation-delay: 0.8s;">
-      <p>&copy; <span id="year"></span> <span id="footer-name" class="text-slate-300">Me</span>. <span class="text-xs text-indigo-400/50 hidden md:inline">Ctrl+/ for terminal</span></p>
+      <p class="mb-4">&copy; <span id="year"></span> <span id="footer-name" class="text-slate-300">Me</span>. <span class="text-xs text-indigo-400/50 hidden md:inline">Ctrl+/ for terminal</span></p>
+      
+      <div class="flex justify-center gap-6 text-xs">
+        <a href="privacy.html" class="hover:text-emerald-400 transition-colors duration-200 relative group">Privacy Policy<span class="absolute -bottom-1 left-0 w-0 h-px bg-emerald-400 transition-all group-hover:w-full"></span></a>
+        <a href="terms.html" class="hover:text-emerald-400 transition-colors duration-200 relative group">Terms of Service<span class="absolute -bottom-1 left-0 w-0 h-px bg-emerald-400 transition-all group-hover:w-full"></span></a>
+        <a href="disclaimer.html" class="hover:text-emerald-400 transition-colors duration-200 relative group">Disclaimer<span class="absolute -bottom-1 left-0 w-0 h-px bg-emerald-400 transition-all group-hover:w-full"></span></a>
+      </div>
     </footer>
   </main>
 
@@ -290,15 +270,15 @@
       if (!isMobile) initFluidCursor();
       initScrollProgress();
       initDock();       
-      if (!isMobile) initContextMenu(); 
+      initContextMenu(); // Check shift key internally
       initTerminal();
       if (!isMobile) initMagneticButtons(); 
       if (!isMobile) initSpotlightCards();  
       initClickRipple();
-      // 新增：聊天相關初始化
+      
+      // Chat Session & Resize
       initResizableChat();
       initChatCookieNotice();
-
       let sessionId = localStorage.getItem('chat_session_id');
       if (!sessionId) {
         sessionId = 'sess_' + Math.random().toString(36).substr(2, 9);
@@ -318,65 +298,36 @@
       });
     };
 
-    // ★★★ 新增：聊天視窗縮放邏輯 ★★★
+    // Chat Resize
     function initResizableChat() {
       const chatWindow = document.getElementById('chat-window');
       const handle = document.getElementById('chat-resize-handle');
-      
-      let isResizing = false;
-      let startX, startY, startWidth, startHeight;
-
+      let isResizing = false, startX, startY, startWidth, startHeight;
       handle.addEventListener('mousedown', (e) => {
-        isResizing = true;
-        startX = e.clientX;
-        startY = e.clientY;
+        isResizing = true; startX = e.clientX; startY = e.clientY;
         startWidth = parseInt(getComputedStyle(chatWindow).width, 10);
         startHeight = parseInt(getComputedStyle(chatWindow).height, 10);
-        document.body.style.cursor = 'nwse-resize';
-        e.preventDefault();
+        document.body.style.cursor = 'nwse-resize'; e.preventDefault();
       });
-
       document.addEventListener('mousemove', (e) => {
         if (!isResizing) return;
-        
-        // 因為是固定在右下角，所以往左上拉是增加尺寸
         const width = startWidth + (startX - e.clientX);
         const height = startHeight + (startY - e.clientY);
-
-        // 限制最小尺寸
         if (width > 300 && width < 600) chatWindow.style.width = `${width}px`;
         if (height > 400 && height < 800) chatWindow.style.height = `${height}px`;
       });
-
-      document.addEventListener('mouseup', () => {
-        isResizing = false;
-        document.body.style.cursor = '';
-      });
+      document.addEventListener('mouseup', () => { isResizing = false; document.body.style.cursor = ''; });
     }
 
-    // ★★★ 新增：Cookie 提示邏輯 ★★★
     function initChatCookieNotice() {
-      // 檢查是否已經關閉過
       if (localStorage.getItem('chat_cookie_accepted') === 'true') return;
-
       const noticeArea = document.getElementById('chat-notice-area');
       const alert = document.createElement('div');
       alert.className = 'cookie-alert';
-      alert.innerHTML = `
-        <i class="fas fa-info-circle"></i>
-        <div class="flex-1">
-          為保存您的對話紀錄以便日後回覆，本網站使用瀏覽器 Cookies。<br>
-          <span class="text-[9px] opacity-70">清理瀏覽器快取將遺失對話。</span>
-        </div>
-        <button onclick="acceptChatCookie(this)" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button>
-      `;
+      alert.innerHTML = `<i class="fas fa-info-circle"></i><div class="flex-1">為保存對話紀錄，本站使用 Cookies。<br><span class="text-[9px] opacity-70">清理快取將遺失對話。</span></div><button onclick="acceptChatCookie(this)" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button>`;
       noticeArea.appendChild(alert);
     }
-
-    function acceptChatCookie(btn) {
-      localStorage.setItem('chat_cookie_accepted', 'true');
-      btn.parentElement.remove();
-    }
+    function acceptChatCookie(btn) { localStorage.setItem('chat_cookie_accepted', 'true'); btn.parentElement.remove(); }
 
     async function fetchData() {
       try {
@@ -396,13 +347,10 @@
     function renderSettings(s) {
       if(!s) return;
       document.title = s.site_title || 'Portfolio';
-      
       const titleEl = document.getElementById('site-title');
       titleEl.textContent = s.site_title || 'User';
-
       document.getElementById('footer-name').textContent = s.site_title || 'Me';
       document.getElementById('bio-text').textContent = s.bio_text || '';
-      
       if(s.avatar_url) document.getElementById('avatar-img').src = s.avatar_url;
       if (s.site_subtitle) typingWords = s.site_subtitle.split(',').map(w => w.trim());
       startTypewriter();
@@ -411,16 +359,20 @@
       let html = '';
       const btnClass = "magnetic-btn w-12 h-12 rounded-full glass-card flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-hover text-xl";
       
-      if(s.github_username) html += `<a href="https://github.com/${s.github_username}" target="_blank" class="${btnClass}" title="GitHub"><i class="fab fa-github"></i></a>`;
-      if(s.instagram_url) html += `<a href="${s.instagram_url}" target="_blank" class="${btnClass}" title="Instagram"><i class="fab fa-instagram"></i></a>`;
-      if(s.twitter_url) html += `<a href="${s.twitter_url}" target="_blank" class="${btnClass}" title="Twitter"><i class="fab fa-twitter"></i></a>`;
-      if(s.linkedin_url) html += `<a href="${s.linkedin_url}" target="_blank" class="${btnClass}" title="LinkedIn"><i class="fab fa-linkedin"></i></a>`;
+      const links = [
+        {k:'github_username', u:`https://github.com/${s.github_username}`, i:'fab fa-github', t:'GitHub'},
+        {k:'instagram_url', u:s.instagram_url, i:'fab fa-instagram', t:'Instagram'},
+        {k:'twitter_url', u:s.twitter_url, i:'fab fa-twitter', t:'Twitter'},
+        {k:'linkedin_url', u:s.linkedin_url, i:'fab fa-linkedin', t:'LinkedIn'},
+        {k:'facebook_url', u:s.facebook_url, i:'fab fa-facebook', t:'Facebook'},
+        {k:'youtube_url', u:s.youtube_url, i:'fab fa-youtube', t:'YouTube'},
+        {k:'email_address', u:`mailto:${s.email_address}`, i:'fas fa-envelope', t:'Email'},
+        {k:'website_url', u:s.website_url, i:'fas fa-globe', t:'Website'}
+      ];
       
-      if(s.facebook_url) html += `<a href="${s.facebook_url}" target="_blank" class="${btnClass}" title="Facebook"><i class="fab fa-facebook"></i></a>`;
-      if(s.youtube_url) html += `<a href="${s.youtube_url}" target="_blank" class="${btnClass}" title="YouTube"><i class="fab fa-youtube"></i></a>`;
-      if(s.email_address) html += `<a href="mailto:${s.email_address}" class="${btnClass}" title="Email"><i class="fas fa-envelope"></i></a>`;
-      if(s.website_url) html += `<a href="${s.website_url}" target="_blank" class="${btnClass}" title="Website"><i class="fas fa-globe"></i></a>`;
-
+      links.forEach(link => {
+         if(s[link.k]) html += `<a href="${link.u}" target="_blank" class="${btnClass}" title="${link.t}"><i class="${link.i}"></i></a>`;
+      });
       social.innerHTML = html;
       if(!isMobile) initMagneticButtons(); 
     }
@@ -428,9 +380,7 @@
     function renderLinks(data) {
       const container = document.getElementById('links-container');
       container.innerHTML = '';
-      if (!data || data.length === 0) { 
-        container.innerHTML = '<div class="col-span-full text-center text-slate-500">No content available</div>'; return; 
-      }
+      if (!data || data.length === 0) { container.innerHTML = '<div class="col-span-full text-center text-slate-500">No content available</div>'; return; }
       data.forEach((item, idx) => {
         const html = `
           <div onclick='openCard(${JSON.stringify(item)})' 
@@ -478,83 +428,47 @@
       overlay.classList.add('active');
       document.body.style.overflow = 'hidden';
     }
-    function closeCard() {
-      document.getElementById('card-overlay').classList.remove('active');
-      document.body.style.overflow = '';
-    }
+    function closeCard() { document.getElementById('card-overlay').classList.remove('active'); document.body.style.overflow = ''; }
 
     function toggleChat() {
       const win = document.getElementById('chat-window');
       win.classList.toggle('open');
-      if(win.classList.contains('open')) {
-        document.getElementById('dock-chat-badge').classList.add('hidden');
-        scrollToBottom();
-        fetchChatHistory();
-      }
+      if(win.classList.contains('open')) { document.getElementById('dock-chat-badge').classList.add('hidden'); scrollToBottom(); fetchChatHistory(); }
     }
     async function sendMessage() {
-      const input = document.getElementById('chat-input');
-      const msg = input.value.trim();
-      if (!msg) return;
-      appendMessage('User', msg);
-      input.value = '';
-      scrollToBottom();
-      try {
-        await fetch(API_URL, {
-          method: 'POST',
-          body: JSON.stringify({ action: 'sendMessage', payload: { sessionId: window.sessionId, message: msg } })
-        });
-      } catch (e) {}
+      const input = document.getElementById('chat-input'); const msg = input.value.trim();
+      if (!msg) return; appendMessage('User', msg); input.value = ''; scrollToBottom();
+      try { await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'sendMessage', payload: { sessionId: window.sessionId, message: msg } }) }); } catch (e) {}
     }
     async function fetchChatHistory() {
       try {
-        const res = await fetch(`${API_URL}?type=api`, {
-          method: 'POST',
-          body: JSON.stringify({ action: 'getChatHistory', payload: { sessionId: window.sessionId } })
-        });
+        const res = await fetch(`${API_URL}?type=api`, { method: 'POST', body: JSON.stringify({ action: 'getChatHistory', payload: { sessionId: window.sessionId } }) });
         const result = await res.json();
         if (result.status === 'success') {
           const container = document.getElementById('chat-messages');
-          // 保持開頭的提示
-          const startMsg = '<div class="text-center text-xs text-slate-500 my-4">Start a conversation</div>';
-          let html = startMsg;
-          result.data.forEach(m => {
-            const cls = m.sender === 'User' ? 'msg-user' : 'msg-admin';
-            html += `<div class="msg-bubble ${cls}">${m.message}</div>`;
-          });
-          container.innerHTML = html;
-          scrollToBottom();
+          let html = '<div class="text-center text-xs text-slate-500 my-4">Start a conversation</div>';
+          result.data.forEach(m => { const cls = m.sender === 'User' ? 'msg-user' : 'msg-admin'; html += `<div class="msg-bubble ${cls}">${m.message}</div>`; });
+          container.innerHTML = html; scrollToBottom();
         }
       } catch(e) {}
     }
     function appendMessage(sender, text) {
-      const container = document.getElementById('chat-messages');
-      const div = document.createElement('div');
-      div.className = `msg-bubble ${sender === 'User' ? 'msg-user' : 'msg-admin'}`;
-      div.textContent = text;
-      container.appendChild(div);
+      const container = document.getElementById('chat-messages'); const div = document.createElement('div');
+      div.className = `msg-bubble ${sender === 'User' ? 'msg-user' : 'msg-admin'}`; div.textContent = text; container.appendChild(div);
     }
     function scrollToBottom() { const div = document.getElementById('chat-messages'); div.scrollTop = div.scrollHeight; }
 
-    let isGravityActive = false;
+    let engine, runner, gravityTimeout, isGravityActive = false;
     function initGravity() {
-      if (isGravityActive) return;
-      isGravityActive = true;
-      const btn = document.createElement('button');
-      btn.id = 'exit-gravity-btn';
-      btn.className = 'fixed top-6 right-6 z-[10002] bg-red-600/90 hover:bg-red-500 text-white px-6 py-2 rounded-full font-mono font-bold shadow-[0_0_20px_rgba(220,38,38,0.5)] transition-all transform hover:scale-105 flex items-center gap-2 backdrop-blur-md';
-      btn.innerHTML = '<i class="fas fa-power-off"></i> ABORT PHYSICS';
-      btn.onclick = stopGravity;
-      document.body.appendChild(btn);
+      if (isGravityActive) return; isGravityActive = true;
+      const btn = document.createElement('button'); btn.id = 'exit-gravity-btn'; btn.className = 'fixed top-6 right-6 z-[10002] bg-red-600/90 hover:bg-red-500 text-white px-6 py-2 rounded-full font-mono font-bold shadow-[0_0_20px_rgba(220,38,38,0.5)] transition-all transform hover:scale-105 flex items-center gap-2 backdrop-blur-md';
+      btn.innerHTML = '<i class="fas fa-power-off"></i> ABORT PHYSICS'; btn.onclick = stopGravity; document.body.appendChild(btn);
       gravityTimeout = setTimeout(stopGravity, 30000);
-      
       const Engine = Matter.Engine, World = Matter.World, Bodies = Matter.Bodies, Mouse = Matter.Mouse, MouseConstraint = Matter.MouseConstraint;
       engine = Engine.create();
-      const elements = document.querySelectorAll('.physics-body');
-      const bodies = [];
+      const elements = document.querySelectorAll('.physics-body'); const bodies = [];
       elements.forEach(el => {
-        const rect = el.getBoundingClientRect();
-        el.dataset.origStyle = el.getAttribute('style') || ''; 
+        const rect = el.getBoundingClientRect(); el.dataset.origStyle = el.getAttribute('style') || ''; 
         const body = Bodies.rectangle(rect.left + rect.width / 2, rect.top + rect.height / 2, rect.width, rect.height, { restitution: 0.8, friction: 0.5 });
         body.domElement = el; bodies.push(body);
         el.style.position = 'fixed'; el.style.width = rect.width + 'px'; el.style.height = rect.height + 'px'; el.style.zIndex = '9999'; el.style.left = '0'; el.style.top = '0'; el.style.transform = `translate(${rect.left}px, ${rect.top}px)`;
@@ -565,18 +479,10 @@
       let wallR = Bodies.rectangle(window.innerWidth + 50, window.innerHeight / 2, 100, window.innerHeight, wallOptions);
       let ceiling = Bodies.rectangle(window.innerWidth / 2, -500, window.innerWidth, 100, wallOptions);
       World.add(engine.world, [ground, wallL, wallR, ceiling, ...bodies]);
-      runner = Matter.Runner.create();
-      Matter.Runner.run(runner, engine);
+      runner = Matter.Runner.create(); Matter.Runner.run(runner, engine);
       function update() {
         if (!isGravityActive) return;
-        bodies.forEach(b => {
-          const el = b.domElement;
-          if(el) {
-             const x = b.position.x - el.offsetWidth / 2;
-             const y = b.position.y - el.offsetHeight / 2;
-             el.style.transform = `translate(${x}px, ${y}px) rotate(${b.angle}rad)`;
-          }
-        });
+        bodies.forEach(b => { const el = b.domElement; if(el) { const x = b.position.x - el.offsetWidth / 2; const y = b.position.y - el.offsetHeight / 2; el.style.transform = `translate(${x}px, ${y}px) rotate(${b.angle}rad)`; } });
         requestAnimationFrame(update);
       }
       requestAnimationFrame(update);
@@ -584,162 +490,42 @@
       World.add(engine.world, mouseConstraint);
     }
     function stopGravity() {
-        if (!isGravityActive) return;
-        isGravityActive = false;
-        clearTimeout(gravityTimeout);
-        const btn = document.getElementById('exit-gravity-btn');
-        if (btn) btn.remove();
-        if (runner) Matter.Runner.stop(runner);
-        if (engine) Matter.Engine.clear(engine);
-        document.querySelectorAll('.physics-body').forEach(el => {
-            el.style = el.dataset.origStyle || ''; el.style.transform = ''; 
-        });
+        if (!isGravityActive) return; isGravityActive = false; clearTimeout(gravityTimeout);
+        const btn = document.getElementById('exit-gravity-btn'); if (btn) btn.remove();
+        if (runner) Matter.Runner.stop(runner); if (engine) Matter.Engine.clear(engine);
+        document.querySelectorAll('.physics-body').forEach(el => { el.style = el.dataset.origStyle || ''; el.style.transform = ''; });
     }
 
     function initClickRipple() {
-      window.addEventListener('click', (e) => {
-        const ripple = document.createElement('div'); ripple.className = 'ripple'; ripple.style.left = `${e.clientX}px`; ripple.style.top = `${e.clientY}px`; document.body.appendChild(ripple);
-        for(let i=0; i<6; i++) createParticle(e.clientX, e.clientY);
-        setTimeout(() => ripple.remove(), 600);
-      });
+      window.addEventListener('click', (e) => { const r = document.createElement('div'); r.className = 'ripple'; r.style.left=`${e.clientX}px`; r.style.top=`${e.clientY}px`; document.body.appendChild(r); for(let i=0; i<6; i++) createParticle(e.clientX, e.clientY); setTimeout(() => r.remove(), 600); });
     }
     function createParticle(x, y) {
       const p = document.createElement('div'); p.style.cssText = `position:absolute; width:4px; height:4px; background:#10b981; border-radius:50%; pointer-events:none; z-index:9998; left:${x}px; top:${y}px;`; document.body.appendChild(p);
       const dx = (Math.random() - 0.5) * 100; const dy = (Math.random() - 0.5) * 100;
       p.animate([{ transform: 'translate(0,0)', opacity: 1 }, { transform: `translate(${dx}px, ${dy}px)`, opacity: 0 }], { duration: 600 }).onfinish = () => p.remove();
     }
-
     function initMagneticButtons() {
-      document.querySelectorAll('.magnetic-btn').forEach(btn => {
-        btn.addEventListener('mousemove', (e) => {
-          const r = btn.getBoundingClientRect();
-          const x = e.clientX - r.left - r.width/2; const y = e.clientY - r.top - r.height/2;
-          btn.style.transform = `translate(${x*0.3}px, ${y*0.3}px)`;
-        });
-        btn.addEventListener('mouseleave', () => btn.style.transform = 'translate(0,0)');
-      });
+      document.querySelectorAll('.magnetic-btn').forEach(btn => { btn.addEventListener('mousemove', (e) => { const r = btn.getBoundingClientRect(); const x = e.clientX - r.left - r.width/2; const y = e.clientY - r.top - r.height/2; btn.style.transform = `translate(${x*0.3}px, ${y*0.3}px)`; }); btn.addEventListener('mouseleave', () => btn.style.transform = 'translate(0,0)'); });
     }
-
     function initSpotlightCards() {
-      const cards = document.getElementsByClassName('spotlight-card');
-      document.getElementById('links-container').onmousemove = e => {
-        for (const c of cards) {
-          const r = c.getBoundingClientRect();
-          c.style.setProperty('--mouse-x', `${e.clientX - r.left}px`);
-          c.style.setProperty('--mouse-y', `${e.clientY - r.top}px`);
-        }
-      };
+      const cards = document.getElementsByClassName('spotlight-card'); document.getElementById('links-container').onmousemove = e => { for (const c of cards) { const r = c.getBoundingClientRect(); c.style.setProperty('--mouse-x', `${e.clientX - r.left}px`); c.style.setProperty('--mouse-y', `${e.clientY - r.top}px`); } };
     }
-
     function initFluidCursor() {
-      const dot = document.querySelector('.cursor-dot'), outline = document.querySelector('.cursor-outline');
-      let m = {x:0, y:0}, o = {x:0, y:0};
+      const dot = document.querySelector('.cursor-dot'), outline = document.querySelector('.cursor-outline'); let m = {x:0, y:0}, o = {x:0, y:0};
       window.addEventListener('mousemove', e => { m.x=e.clientX; m.y=e.clientY; dot.style.left=`${m.x}px`; dot.style.top=`${m.y}px`; });
-      window.addEventListener('mousedown', () => document.body.classList.add('clicking'));
-      window.addEventListener('mouseup', () => document.body.classList.remove('clicking'));
-      const anim = () => {
-        o.x += (m.x - o.x)*0.15; o.y += (m.y - o.y)*0.15;
-        outline.style.left=`${o.x}px`; outline.style.top=`${o.y}px`;
-        requestAnimationFrame(anim);
-      };
-      anim();
-      new MutationObserver(ms => ms.forEach(m => { if(m.addedNodes.length) attachHover(); }))
-        .observe(document.body, {childList:true, subtree:true});
-      function attachHover() { document.querySelectorAll('a, button, .cursor-hover, .dock-item, .ctx-item').forEach(el => {
-        el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
-        el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
-      }); }
-      attachHover();
+      window.addEventListener('mousedown', () => document.body.classList.add('clicking')); window.addEventListener('mouseup', () => document.body.classList.remove('clicking'));
+      const anim = () => { o.x += (m.x - o.x)*0.15; o.y += (m.y - o.y)*0.15; outline.style.left=`${o.x}px`; outline.style.top=`${o.y}px`; requestAnimationFrame(anim); }; anim();
+      new MutationObserver(ms => ms.forEach(m => { if(m.addedNodes.length) attachHover(); })).observe(document.body, {childList:true, subtree:true});
+      function attachHover() { document.querySelectorAll('a, button, .cursor-hover, .dock-item, .ctx-item').forEach(el => { el.addEventListener('mouseenter', () => document.body.classList.add('hovering')); el.addEventListener('mouseleave', () => document.body.classList.remove('hovering')); }); } attachHover();
     }
-
-    function initDock() {
-      const dockSoundBtn = document.getElementById('dock-sound-btn');
-      dockSoundBtn.addEventListener('click', toggleSound);
-    }
-
-    function initContextMenu() {
-      const menu = document.getElementById('context-menu');
-      document.addEventListener('contextmenu', (e) => {
-        if (e.shiftKey) { menu.style.display = 'none'; return; }
-        e.preventDefault();
-        const x = e.clientX; const y = e.clientY;
-        const menuW = 200, menuH = 200;
-        const finalX = x + menuW > window.innerWidth ? x - menuW : x;
-        const finalY = y + menuH > window.innerHeight ? y - menuH : y;
-        menu.style.left = `${finalX}px`; menu.style.top = `${finalY}px`; menu.style.display = 'block';
-      });
-      document.addEventListener('click', () => menu.style.display = 'none');
-    }
-
-    function toggleSound() {
-      if (!audioCtx) audioCtx = new AudioContext();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      isMuted = !isMuted;
-      const icons = document.querySelectorAll('.fa-volume-mute, .fa-volume-up');
-      icons.forEach(icon => { icon.className = isMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up text-emerald-400'; });
-      if(!isMuted) playTone(600, 'sine', 0.1);
-    }
-
-    function toggleTerminal() {
-      const overlay = document.getElementById('terminal-overlay');
-      const input = document.getElementById('terminal-input');
-      if(overlay.classList.contains('-translate-y-full')) {
-        overlay.classList.remove('-translate-y-full');
-        input.focus();
-        if(!isMuted && audioCtx) playTone(200, 'square', 0.2);
-      } else {
-        overlay.classList.add('-translate-y-full');
-      }
-    }
-
-    function playTone(f,t,d) {
-      if(!audioCtx) return;
-      const o=audioCtx.createOscillator(), g=audioCtx.createGain();
-      o.type=t; o.frequency.setValueAtTime(f, audioCtx.currentTime);
-      g.gain.setValueAtTime(0.05, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+d);
-      o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+d);
-    }
-
-    function initTerminal() {
-      const overlay=document.getElementById('terminal-overlay'), input=document.getElementById('terminal-input'), out=document.getElementById('terminal-output');
-      document.addEventListener('keydown', e => { if(e.key === '/' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); toggleTerminal(); } });
-      input.addEventListener('keydown', e => { if(e.key==='Enter') { const c=input.value; input.value=''; printLog(`user@port:~$ ${c}`); process(c.trim().toLowerCase()); } });
-      function printLog(h) { const d=document.createElement('div'); d.innerHTML=h; out.appendChild(d); out.scrollTop=out.scrollHeight; }
-      function process(c) {
-        let r='';
-        switch(c) {
-          case 'help': r='Commands: ls, cat, gravity, matrix, exit'; break;
-          case 'ls': r='gravity_module.exe  secrets.txt'; break;
-          case 'gravity': r='Activating Zero-G Physics Engine...'; setTimeout(initGravity, 1000); break;
-          case 'matrix': r='Wake up, Neo...'; break;
-          case 'exit': toggleTerminal(); break;
-          default: r=`Unknown: ${c}`;
-        }
-        printLog(r);
-      }
-    }
-
-    function startTypewriter() {
-      const el=document.getElementById('typewriter'); let w=0, c=0, d=false;
-      function type() {
-        if(!typingWords.length) return;
-        const txt = typingWords[w];
-        el.textContent = txt.substring(0, d?c-1:c+1); d?c--:c++;
-        let s = d?30:80;
-        if(!d && c===txt.length) { d=true; s=2500; } else if(d && c===0) { d=false; w=(w+1)%typingWords.length; s=500; }
-        setTimeout(type, s);
-      }
-      type();
-    }
-
-    function initScrollProgress() {
-      const bar=document.getElementById('scroll-progress');
-      window.addEventListener('scroll', () => {
-        const s = document.documentElement.scrollTop || document.body.scrollTop;
-        const h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        bar.style.width = `${(s/h)*100}%`;
-      });
-    }
+    function initDock() { const b = document.getElementById('dock-sound-btn'); b.addEventListener('click', toggleSound); }
+    function initContextMenu() { const m = document.getElementById('context-menu'); document.addEventListener('contextmenu', (e) => { if (e.shiftKey) { m.style.display = 'none'; return; } e.preventDefault(); const x = e.clientX, y = e.clientY, mW = 200, mH = 200, fX = x + mW > window.innerWidth ? x - mW : x, fY = y + mH > window.innerHeight ? y - mH : y; m.style.left = `${fX}px`; m.style.top = `${fY}px`; m.style.display = 'block'; }); document.addEventListener('click', () => m.style.display = 'none'); }
+    function toggleSound() { if (!audioCtx) audioCtx = new AudioContext(); if (audioCtx.state === 'suspended') audioCtx.resume(); isMuted = !isMuted; const icons = document.querySelectorAll('.fa-volume-mute, .fa-volume-up'); icons.forEach(icon => { icon.className = isMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up text-emerald-400'; }); if(!isMuted) playTone(600, 'sine', 0.1); }
+    function toggleTerminal() { const o = document.getElementById('terminal-overlay'), i = document.getElementById('terminal-input'); if(o.classList.contains('-translate-y-full')) { o.classList.remove('-translate-y-full'); i.focus(); if(!isMuted && audioCtx) playTone(200, 'square', 0.2); } else { o.classList.add('-translate-y-full'); } }
+    function playTone(f,t,d) { if(!audioCtx) return; const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.type=t; o.frequency.setValueAtTime(f, audioCtx.currentTime); g.gain.setValueAtTime(0.05, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+d); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+d); }
+    function initTerminal() { const o=document.getElementById('terminal-overlay'), i=document.getElementById('terminal-input'), out=document.getElementById('terminal-output'); document.addEventListener('keydown', e => { if(e.key === '/' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); toggleTerminal(); } }); i.addEventListener('keydown', e => { if(e.key==='Enter') { const c=i.value; i.value=''; printLog(`user@port:~$ ${c}`); process(c.trim().toLowerCase()); } }); function printLog(h) { const d=document.createElement('div'); d.innerHTML=h; out.appendChild(d); out.scrollTop=out.scrollHeight; } function process(c) { let r=''; switch(c) { case 'help': r='Commands: ls, cat, gravity, matrix, exit'; break; case 'ls': r='gravity_module.exe  secrets.txt'; break; case 'gravity': r='Activating Zero-G Physics Engine...'; setTimeout(initGravity, 1000); break; case 'matrix': r='Wake up, Neo...'; break; case 'exit': toggleTerminal(); break; default: r=`Unknown: ${c}`; } printLog(r); } }
+    function startTypewriter() { const el=document.getElementById('typewriter'); let w=0, c=0, d=false; function type() { if(!typingWords.length) return; const txt = typingWords[w]; el.textContent = txt.substring(0, d?c-1:c+1); d?c--:c++; let s = d?30:80; if(!d && c===txt.length) { d=true; s=2500; } else if(d && c===0) { d=false; w=(w+1)%typingWords.length; s=500; } setTimeout(type, s); } type(); }
+    function initScrollProgress() { const bar=document.getElementById('scroll-progress'); window.addEventListener('scroll', () => { const s = document.documentElement.scrollTop || document.body.scrollTop; const h = document.documentElement.scrollHeight - document.documentElement.clientHeight; bar.style.width = `${(s/h)*100}%`; }); }
   </script>
 </body>
 </html>
