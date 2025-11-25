@@ -53,14 +53,21 @@
     .glass-card:hover::before { @apply opacity-100; }
   }
 
-  /* --- 懸浮 Dock (視覺樣式) --- */
+  /* --- ★★★ 懸浮 Dock (右側垂直版) ★★★ --- */
   .floating-dock {
-    @apply flex gap-3 px-3 py-2.5;
-    @apply bg-slate-950/80 backdrop-blur-xl rounded-2xl;
+    /* 通用樣式 */
+    @apply fixed z-[9000] flex items-center justify-center bg-slate-950/80 backdrop-blur-xl rounded-2xl;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-top: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.8);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* 手機版 (底部水平) */
+    @apply bottom-6 left-1/2 -translate-x-1/2 flex-row gap-3 px-4 py-2.5 max-w-[90vw] overflow-x-auto;
+
+    /* 電腦版 (右側垂直) */
+    @apply md:bottom-auto md:left-auto md:right-6 md:top-1/2 md:-translate-y-1/2 md:translate-x-0;
+    @apply md:flex-col md:gap-4 md:px-3 md:py-4 md:overflow-visible;
   }
 
   .dock-item {
@@ -69,14 +76,20 @@
   }
 
   @media (hover: hover) {
-    .dock-item:hover { @apply -translate-y-2 scale-110; }
-    /* Tooltip */
+    /* 電腦版 Hover：往左彈出 */
+    .dock-item:hover { @apply md:-translate-x-1 md:translate-y-0 -translate-y-2 scale-110; }
+    
+    /* Tooltip (顯示在左側) */
     .dock-item::after {
       content: attr(data-tooltip);
+      /* 手機/預設：上方 */
       @apply absolute bottom-[140%] left-1/2 -translate-x-1/2 opacity-0 px-2 py-1 rounded-md text-[10px] font-bold tracking-wider pointer-events-none transition-all duration-200 whitespace-nowrap;
       @apply bg-black/90 text-emerald-400 border border-emerald-500/20 backdrop-blur-sm shadow-xl translate-y-2;
+
+      /* 電腦版：右側垂直排列時，Tooltip 改到左邊 */
+      @apply md:bottom-auto md:top-1/2 md:left-auto md:right-[130%] md:-translate-y-1/2 md:translate-x-2;
     }
-    .dock-item:hover::after { @apply opacity-100 translate-y-0; }
+    .dock-item:hover::after { @apply opacity-100 translate-y-0 md:translate-x-0; }
   }
   .dock-item:active { @apply scale-95; }
 
@@ -101,10 +114,7 @@
   }
   .chat-window.open { @apply scale-100 opacity-100; }
   .chat-header { @apply bg-emerald-600/20 p-4 border-b border-white/10 flex justify-between items-center; }
-  
-  /* ★★★ 修正：移除不存在的 scrollbar-thin ★★★ */
   .chat-messages { @apply flex-1 p-4 overflow-y-auto space-y-3; }
-  
   .chat-input-area { @apply p-3 border-t border-white/10 flex gap-2 bg-black/20; }
   .msg-bubble { @apply max-w-[85%] p-3 rounded-2xl text-sm leading-relaxed break-words shadow-sm; }
   .msg-user { @apply bg-emerald-600 text-white self-end rounded-tr-sm ml-auto shadow-emerald-900/20; }
@@ -131,7 +141,7 @@
 
 /* === 3. 工具類與動畫 (Utilities) === */
 @layer utilities {
-  /* 滾動條美化 (這裡已經定義了全局滾動條樣式，所以不需要 scrollbar-thin) */
+  /* 滾動條美化 */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { @apply bg-transparent; }
   ::-webkit-scrollbar-thumb { @apply bg-white/10 rounded-full hover:bg-emerald-500/50 transition-colors; }
