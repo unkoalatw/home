@@ -5,12 +5,11 @@
 /* === 1. 全局設定 (Global Settings) === */
 @layer base {
   body {
-    /* 加入 antialiased 讓字體更清晰，自定義選取顏色 */
-    @apply bg-[#050505] text-slate-200 overflow-x-hidden cursor-none antialiased selection:bg-emerald-500/30 selection:text-emerald-200;
+    @apply bg-[#0a0a0a] text-slate-50 overflow-x-hidden cursor-none antialiased selection:bg-emerald-500/30 selection:text-emerald-200;
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* 手機版優化：恢復原生游標 */
+  /* 手機版優化：恢復原生游標，隱藏自定義游標 */
   @media (hover: none) and (pointer: coarse) {
     body { cursor: auto; }
     .cursor-dot, .cursor-outline { display: none !important; }
@@ -18,33 +17,32 @@
   }
 }
 
-/* === 2. 自定義組件 (Components) - 細節升級版 === */
+/* === 2. 自定義組件 (Components) === */
 @layer components {
-  /* 玻璃卡片 (升級：加入立體光影邊框) */
+  /* --- 高級玻璃卡片 (帶光影邊框) --- */
   .glass-card {
     @apply bg-slate-900/40 relative overflow-hidden transition-all duration-500 ease-out;
-    /* 邊框細節：上方和左方較亮，模擬光源 */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    /* 模擬左上角光源的立體邊框 */
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-top-color: rgba(255, 255, 255, 0.15);
     border-left-color: rgba(255, 255, 255, 0.15);
-    
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
     box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.3);
   }
   
-  /* 聚光燈遮罩層 */
+  /* 聚光燈遮罩層 (Spotlight Layer) */
   .glass-card::before {
     content: "";
     @apply absolute inset-0 opacity-0 transition-opacity duration-500 pointer-events-none z-10;
     background: radial-gradient(
-      1000px circle at var(--mouse-x) var(--mouse-y),
-      rgba(255, 255, 255, 0.06),
+      800px circle at var(--mouse-x) var(--mouse-y),
+      rgba(255, 255, 255, 0.08),
       transparent 40%
     );
   }
   
-  /* 懸停效果 (僅限電腦) */
+  /* 電腦版懸停效果 */
   @media (hover: hover) {
     .glass-card:hover {
       @apply -translate-y-1 shadow-2xl shadow-black/40;
@@ -55,39 +53,34 @@
     .glass-card:hover::before { @apply opacity-100; }
   }
 
-  /* 磁吸按鈕 */
-  .magnetic-btn {
-    @apply inline-flex items-center justify-center transition-transform duration-200 ease-out active:scale-95;
-  }
-
-  /* 懸浮 Dock 工具列 (升級：更細緻的玻璃感) */
+  /* --- 懸浮 Dock (視覺樣式) --- */
   .floating-dock {
-    @apply fixed bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-[9000] px-4 py-3;
-    @apply bg-slate-950/60 backdrop-blur-xl rounded-2xl;
+    @apply flex gap-3 px-3 py-2.5;
+    @apply bg-slate-950/80 backdrop-blur-xl rounded-2xl;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-top: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
-    max-width: 90vw; overflow-x: auto;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.8);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .dock-item {
-    @apply relative w-11 h-11 flex items-center justify-center rounded-xl text-slate-400 transition-all duration-300 shrink-0;
+    @apply relative w-10 h-10 flex items-center justify-center rounded-xl text-slate-400 transition-all duration-300 shrink-0 cursor-pointer;
     @apply hover:bg-white/10 hover:text-white hover:shadow-[0_0_15px_rgba(255,255,255,0.1)];
   }
 
   @media (hover: hover) {
-    .dock-item:hover { @apply -translate-y-1; }
-    /* Tooltip (升級：玻璃質感) */
+    .dock-item:hover { @apply -translate-y-2 scale-110; }
+    /* Tooltip */
     .dock-item::after {
       content: attr(data-tooltip);
-      @apply absolute bottom-[120%] left-1/2 -translate-x-1/2 opacity-0 px-3 py-1.5 rounded-lg text-xs font-medium pointer-events-none transition-all duration-200 whitespace-nowrap;
-      @apply bg-slate-800/90 text-white border border-white/10 backdrop-blur-md shadow-xl translate-y-2;
+      @apply absolute bottom-[140%] left-1/2 -translate-x-1/2 opacity-0 px-2 py-1 rounded-md text-[10px] font-bold tracking-wider pointer-events-none transition-all duration-200 whitespace-nowrap;
+      @apply bg-black/90 text-emerald-400 border border-emerald-500/20 backdrop-blur-sm shadow-xl translate-y-2;
     }
     .dock-item:hover::after { @apply opacity-100 translate-y-0; }
   }
-  .dock-item:active { @apply scale-90; }
+  .dock-item:active { @apply scale-95; }
 
-  /* 自定義右鍵選單 (升級：更精緻的分隔線與陰影) */
+  /* --- 自定義右鍵選單 --- */
   #context-menu {
     @apply absolute hidden z-[10001] w-52 p-1.5 rounded-xl;
     @apply bg-[#0f172a]/95 backdrop-blur-xl;
@@ -98,20 +91,47 @@
   .ctx-item {
     @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 text-[13px] font-medium transition-colors duration-150 cursor-none;
   }
-  .ctx-item:hover { 
-    @apply bg-emerald-500/10 text-emerald-400; 
+  .ctx-item:hover { @apply bg-emerald-500/10 text-emerald-400; }
+  .ctx-divider { @apply h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-1.5; }
+  .ctx-shortcut { @apply ml-auto text-[10px] text-slate-600 font-mono tracking-wider; }
+
+  /* --- 聊天視窗組件 --- */
+  .chat-window {
+    @apply fixed bottom-24 right-6 w-80 h-[450px] bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl z-[9001] flex flex-col transition-all duration-300 origin-bottom-right scale-0 opacity-0 overflow-hidden;
   }
-  .ctx-divider { 
-    @apply h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-1.5; 
+  .chat-window.open { @apply scale-100 opacity-100; }
+  .chat-header { @apply bg-emerald-600/20 p-4 border-b border-white/10 flex justify-between items-center; }
+  
+  /* ★★★ 修正：移除不存在的 scrollbar-thin ★★★ */
+  .chat-messages { @apply flex-1 p-4 overflow-y-auto space-y-3; }
+  
+  .chat-input-area { @apply p-3 border-t border-white/10 flex gap-2 bg-black/20; }
+  .msg-bubble { @apply max-w-[85%] p-3 rounded-2xl text-sm leading-relaxed break-words shadow-sm; }
+  .msg-user { @apply bg-emerald-600 text-white self-end rounded-tr-sm ml-auto shadow-emerald-900/20; }
+  .msg-admin { @apply bg-slate-700 text-slate-200 self-start rounded-tl-sm shadow-black/20; }
+
+  /* --- App Store 卡片展開層 --- */
+  .card-overlay {
+    @apply fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300;
   }
-  .ctx-shortcut { 
-    @apply ml-auto text-[10px] text-slate-600 font-mono tracking-wider; 
+  .card-overlay.active { @apply opacity-100 pointer-events-auto; }
+  .card-expanded {
+    @apply bg-[#0f172a] w-full max-w-4xl h-[85vh] rounded-2xl overflow-y-auto relative shadow-2xl scale-95 transition-transform duration-300 border border-white/10;
+  }
+  .card-overlay.active .card-expanded { @apply scale-100; }
+  .close-btn {
+    @apply absolute top-4 right-4 w-10 h-10 bg-black/40 backdrop-blur rounded-full flex items-center justify-center text-white cursor-pointer hover:bg-white/10 transition z-50 border border-white/10;
+  }
+
+  /* 磁吸按鈕通用 */
+  .magnetic-btn {
+    @apply inline-flex items-center justify-center transition-transform duration-200 ease-out active:scale-95;
   }
 }
 
 /* === 3. 工具類與動畫 (Utilities) === */
 @layer utilities {
-  /* 滾動條 (細節：更細、更隱密) */
+  /* 滾動條美化 (這裡已經定義了全局滾動條樣式，所以不需要 scrollbar-thin) */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { @apply bg-transparent; }
   ::-webkit-scrollbar-thumb { @apply bg-white/10 rounded-full hover:bg-emerald-500/50 transition-colors; }
@@ -127,7 +147,7 @@
   .physics-body { /* 物理引擎標記用 */ }
 }
 
-/* === 4. 特效 (Custom CSS) === */
+/* === 4. 特效 (Custom Effects) === */
 
 /* Aurora Background */
 .gradient-bg {
@@ -143,7 +163,7 @@
 .orb-2 { top: 20%; right: -10%; width: 50vw; height: 50vw; background: #10b981; animation-delay: -5s; }
 .orb-3 { bottom: -10%; left: 20%; width: 70vw; height: 70vw; background: #0ea5e9; animation-delay: -10s; }
 
-/* Custom Cursor (升級：加上混合模式讓它在白色背景上也能看見) */
+/* Liquid Cursor */
 .cursor-dot {
   width: 8px; height: 8px; background-color: white; 
   position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); 
@@ -151,7 +171,7 @@
 }
 .cursor-outline {
   width: 40px; height: 40px; 
-  border: 1px solid rgba(255, 255, 255, 0.5); 
+  border: 1.5px solid rgba(255, 255, 255, 0.5); 
   position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); 
   border-radius: 50%; z-index: 9998; pointer-events: none; 
   transition: width 0.2s, height 0.2s, background-color 0.2s; mix-blend-mode: exclusion;
@@ -176,7 +196,7 @@ body.clicking .cursor-outline {
   mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
 .marquee-content {
-  animation: scroll 60s linear infinite; /* 放慢速度更優雅 */
+  animation: scroll 60s linear infinite;
 }
 @keyframes scroll {
   0% { transform: translateX(0); }
@@ -194,7 +214,7 @@ body.clicking .cursor-outline {
 
 /* Terminal & Preloader Transitions */
 #terminal-overlay {
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); /* 更平滑的貝茲曲線 */
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   transform: translateY(-100%);
 }
 #terminal-overlay.open {
@@ -218,7 +238,7 @@ body.clicking .cursor-outline {
   box-shadow: 0 0 15px #10b981;
 }
 
-/* Animation Keyframes */
+/* Animations */
 @keyframes blob {
   0% { transform: translate(0px, 0px) scale(1); }
   33% { transform: translate(30px, -50px) scale(1.1); }
