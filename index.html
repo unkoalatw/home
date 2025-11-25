@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Portfolio</title>
   
-  <!-- ★★★ 正式環境：連結編譯後的 CSS ★★★ -->
-  <link href="./dist/output.css" rel="stylesheet">
+  <!-- ★★★ 路徑修正：根據您的截圖，CSS 在同一層目錄 ★★★ -->
+  <link href="./output.css" rel="stylesheet">
   
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -115,7 +115,7 @@
         <div class="space-y-4">
           <h1 class="text-4xl md:text-7xl lg:text-8xl font-extrabold tracking-tight text-white leading-tight">
             Hello, I'm <br/>
-            <span id="site-title" class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-emerald-400 cursor-hover">Loading...</span>
+            <span id="site-title" class="hack-text text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-emerald-400 cursor-hover">Loading...</span>
           </h1>
           <div class="text-lg md:text-2xl text-slate-400 font-light h-8 font-mono">
             > I am a <span id="typewriter" class="gradient-text-anim font-bold typing-cursor"></span>
@@ -270,7 +270,8 @@
           <a href="${item.url}" target="_blank" 
              class="glass-card spotlight-card group relative flex flex-col md:flex-row rounded-xl overflow-hidden cursor-hover physics-body">
             <div class="h-48 md:h-auto md:w-1/4 relative overflow-hidden shrink-0 border-b md:border-b-0 md:border-r border-slate-700/50">
-               <img src="${item.imageUrl || 'https://placehold.co/600x400/1e293b/FFF?text=Image'}" class="w-full h-full object-cover transition duration-700 group-hover:scale-105 pointer-events-none">
+               <img src="${item.imageUrl || 'https://placehold.co/600x400/1e293b/FFF?text=Image'}" 
+                    class="w-full h-full object-cover transition duration-700 group-hover:scale-105 pointer-events-none">
                <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent opacity-60 pointer-events-none"></div>
             </div>
             <div class="flex-1 p-6 flex flex-col justify-center relative z-10">
