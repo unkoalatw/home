@@ -42,6 +42,11 @@
     }
     .cookie-alert i { color: #10b981; margin-top: 2px; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* 強制顯示滑鼠游標，並隱藏自定義游標 (覆蓋原本的設定) */
+    body { cursor: auto !important; }
+    .cursor-dot, .cursor-outline { display: none !important; }
+    .dock-item, .ctx-item, a, button, .cursor-hover { cursor: pointer !important; }
   </style>
 </head>
 <body class="font-sans min-h-screen relative selection:bg-indigo-500 selection:text-white">
