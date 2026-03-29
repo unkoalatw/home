@@ -22,6 +22,13 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 
   <style>
+    @font-face {
+      font-family: 'FakePearl';
+      src: url('./FakePearl-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
     /* 聊天視窗調整手柄 */
     .resize-handle {
       position: absolute; top: 0; left: 0; width: 20px; height: 20px;
@@ -42,6 +49,10 @@
     }
     .cookie-alert i { color: #10b981; margin-top: 2px; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* 恢復預設游標 */
+    body { cursor: auto !important; font-family: 'FakePearl', 'Inter', 'Noto Sans TC', sans-serif !important; }
+    .dock-item, .ctx-item, a, button, .cursor-hover { cursor: pointer !important; }
   </style>
 </head>
 <body class="font-sans min-h-screen relative selection:bg-indigo-500 selection:text-white">
@@ -100,9 +111,6 @@
   <!-- UI 元件 -->
   <div id="scroll-progress" class="fixed top-0 left-0 h-[2px] bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-500 z-50 transition-all duration-100" style="width: 0%"></div>
   
-  <!-- 游標 (僅電腦版顯示) -->
-  <div class="cursor-dot hidden md:block"></div>
-  <div class="cursor-outline hidden md:block"></div>
 
   <!-- 終端機 -->
   <div id="terminal-overlay" class="fixed top-0 left-0 w-full h-1/2 bg-[#0f172a]/95 backdrop-blur-xl z-[10000] border-b border-indigo-500/30 shadow-2xl flex flex-col p-6 font-mono text-sm text-indigo-300 overflow-hidden transition-transform duration-300 -translate-y-full">
@@ -288,7 +296,6 @@
 
     window.onload = function() {
       updateLoader(50); 
-      if (!isMobile) initFluidCursor();
       initScrollProgress();
       initDock();       
       initContextMenu(); 
@@ -540,14 +547,6 @@
     }
     function initSpotlightCards() {
       const cards = document.getElementsByClassName('spotlight-card'); document.getElementById('links-container').onmousemove = e => { for (const c of cards) { const r = c.getBoundingClientRect(); c.style.setProperty('--mouse-x', `${e.clientX - r.left}px`); c.style.setProperty('--mouse-y', `${e.clientY - r.top}px`); } };
-    }
-    function initFluidCursor() {
-      const dot = document.querySelector('.cursor-dot'), outline = document.querySelector('.cursor-outline'); let m = {x:0, y:0}, o = {x:0, y:0};
-      window.addEventListener('mousemove', e => { m.x=e.clientX; m.y=e.clientY; dot.style.left=`${m.x}px`; dot.style.top=`${m.y}px`; });
-      window.addEventListener('mousedown', () => document.body.classList.add('clicking')); window.addEventListener('mouseup', () => document.body.classList.remove('clicking'));
-      const anim = () => { o.x += (m.x - o.x)*0.15; o.y += (m.y - o.y)*0.15; outline.style.left=`${o.x}px`; outline.style.top=`${o.y}px`; requestAnimationFrame(anim); }; anim();
-      new MutationObserver(ms => ms.forEach(m => { if(m.addedNodes.length) attachHover(); })).observe(document.body, {childList:true, subtree:true});
-      function attachHover() { document.querySelectorAll('a, button, .cursor-hover, .dock-item, .ctx-item').forEach(el => { el.addEventListener('mouseenter', () => document.body.classList.add('hovering')); el.addEventListener('mouseleave', () => document.body.classList.remove('hovering')); }); } attachHover();
     }
     function initDock() { const b = document.getElementById('dock-sound-btn'); b.addEventListener('click', toggleSound); }
     function initContextMenu() { const m = document.getElementById('context-menu'); document.addEventListener('contextmenu', (e) => { if (e.shiftKey) { m.style.display = 'none'; return; } e.preventDefault(); const x = e.clientX, y = e.clientY; m.style.left = `${x}px`; m.style.top = `${y}px`; m.style.display = 'block'; }); document.addEventListener('click', () => m.style.display = 'none'); }
