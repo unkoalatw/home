@@ -315,13 +315,23 @@
       fetchChatHistory();
       setInterval(fetchChatHistory, 10000);
 
-      fetchData().then(() => {
+      // 確保獲取資料不會無限等待：設定 3000ms 的超時強制關閉載入畫面
+      const hidePreloader = () => {
         updateLoader(100);
         setTimeout(() => {
           const preloader = document.getElementById('preloader');
-          preloader.style.opacity = '0';
-          preloader.style.visibility = 'hidden';
-        }, 800); 
+          if (preloader) {
+            preloader.style.opacity = '0';
+            preloader.style.visibility = 'hidden';
+          }
+        }, 800);
+      };
+
+      const fetchPromise = fetchData();
+      const timeoutPromise = new Promise(resolve => setTimeout(resolve, 3000));
+
+      Promise.race([fetchPromise, timeoutPromise]).then(() => {
+        hidePreloader();
       });
     };
 
