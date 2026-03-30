@@ -4,16 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Portfolio</title>
-  
+
   <!-- 使用 CDN 優化 Favicon -->
   <link rel="icon" type="image/jpg" id="favicon-link" href="unkoala.jpg">
-  
+
   <!-- 連結本地 CSS -->
   <link href="./output.css" rel="stylesheet">
-  
+
   <!-- 字體 -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
-  
+
   <!-- 圖示庫 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -60,7 +60,7 @@
   <!-- ==================== CONFIGURATION ==================== -->
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbw1J5DNcuCTfTGeQXhosPZYOW0MAfXDCNBHIi7rQTQMw7Nrfieuc4XEw0diuQkQ6XdUPg/exec";
-    
+
     // CDN 配置：請確保用戶名與倉庫名正確
     const CDN_CONFIG = {
       user: "unkoalatw",
@@ -107,10 +107,10 @@
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
   </div>
-  
+
   <!-- UI 元件 -->
   <div id="scroll-progress" class="fixed top-0 left-0 h-[2px] bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-500 z-50 transition-all duration-100" style="width: 0%"></div>
-  
+
 
   <!-- 終端機 -->
   <div id="terminal-overlay" class="fixed top-0 left-0 w-full h-1/2 bg-[#0f172a]/95 backdrop-blur-xl z-[10000] border-b border-indigo-500/30 shadow-2xl flex flex-col p-6 font-mono text-sm text-indigo-300 overflow-hidden transition-transform duration-300 -translate-y-full">
@@ -285,7 +285,7 @@
     const fav = document.getElementById('favicon-link');
     if(fav) fav.href = toCDN(fav.getAttribute('href'));
 
-    let typingWords = ["Creative Developer", "Designer"]; 
+    let typingWords = ["Creative Developer", "Designer"];
     let isMuted = true;
     let audioCtx;
     let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -295,13 +295,13 @@
     }
 
     window.onload = function() {
-      updateLoader(50); 
+      updateLoader(50);
       initScrollProgress();
-      initDock();       
-      initContextMenu(); 
+      initDock();
+      initContextMenu();
       initTerminal();
-      if (!isMobile) initMagneticButtons(); 
-      if (!isMobile) initSpotlightCards();  
+      if (!isMobile) initMagneticButtons();
+      if (!isMobile) initSpotlightCards();
       initClickRipple();
       initResizableChat();
       initChatCookieNotice();
@@ -321,7 +321,7 @@
           const preloader = document.getElementById('preloader');
           preloader.style.opacity = '0';
           preloader.style.visibility = 'hidden';
-        }, 800); 
+        }, 800);
       });
     };
 
@@ -346,7 +346,7 @@
       document.getElementById('site-title').textContent = s.site_title || 'User';
       document.getElementById('footer-name').textContent = s.site_title || 'Me';
       document.getElementById('bio-text').textContent = s.bio_text || '';
-      
+
       // Avatar 套用 CDN 邏輯
       const avatarImg = document.getElementById('avatar-img');
       if(s.avatar_url) {
@@ -357,11 +357,11 @@
 
       if (s.site_subtitle) typingWords = s.site_subtitle.split(',').map(w => w.trim());
       startTypewriter();
-      
+
       const social = document.getElementById('social-links');
       let html = '';
       const btnClass = "magnetic-btn w-12 h-12 rounded-full glass-card flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-hover text-xl";
-      
+
       const links = [
         {k:'github_username', u:`https://github.com/${s.github_username}`, i:'fab fa-github', t:'GitHub'},
         {k:'instagram_url', u:s.instagram_url, i:'fab fa-instagram', t:'Instagram'},
@@ -372,27 +372,27 @@
         {k:'email_address', u:`mailto:${s.email_address}`, i:'fas fa-envelope', t:'Email'},
         {k:'website_url', u:s.website_url, i:'fas fa-globe', t:'Website'}
       ];
-      
+
       links.forEach(link => {
          if(s[link.k]) html += `<a href="${link.u}" target="_blank" class="${btnClass}" title="${link.t}"><i class="${link.i}"></i></a>`;
       });
       social.innerHTML = html;
-      if(!isMobile) initMagneticButtons(); 
+      if(!isMobile) initMagneticButtons();
     }
 
     function renderLinks(data) {
       const container = document.getElementById('links-container');
       container.innerHTML = '';
       if (!data || data.length === 0) { container.innerHTML = '<div class="col-span-full text-center text-slate-500">No content available</div>'; return; }
-      
+
       data.forEach((item, idx) => {
         // 項目圖片套用 CDN 邏輯
         const imgUrl = toCDN(item.imageUrl || 'https://placehold.co/600x400/1e293b/FFF?text=Image');
         const html = `
-          <div onclick='openCard(${JSON.stringify(item)})' 
+          <div onclick='openCard(${JSON.stringify(item)})'
              class="glass-card spotlight-card group relative flex flex-col md:flex-row rounded-xl overflow-hidden cursor-pointer physics-body hover:scale-[1.01] transition-transform duration-300">
             <div class="h-48 md:h-auto md:w-1/4 relative overflow-hidden shrink-0 border-b md:border-b-0 md:border-r border-slate-700/50">
-               <img src="${imgUrl}" 
+               <img src="${imgUrl}"
                     class="w-full h-full object-cover transition duration-700 group-hover:scale-105 pointer-events-none">
                <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent opacity-60 pointer-events-none"></div>
             </div>
@@ -417,7 +417,7 @@
       const content = document.getElementById('expanded-content');
       // 內頁圖片也套用 CDN 邏輯
       const imgUrl = toCDN(item.imageUrl || 'https://placehold.co/800');
-      
+
       content.innerHTML = `
         <div class="close-btn" onclick="closeCard()"><i class="fas fa-times"></i></div>
         <div class="h-64 md:h-96 relative">
@@ -456,9 +456,15 @@
         const result = await res.json();
         if (result.status === 'success') {
           const container = document.getElementById('chat-messages');
-          let html = '<div class="text-center text-xs text-slate-500 my-4">Start a conversation</div>';
-          result.data.forEach(m => { const cls = m.sender === 'User' ? 'msg-user' : 'msg-admin'; html += `<div class="msg-bubble ${cls}">${m.message}</div>`; });
-          container.innerHTML = html; scrollToBottom();
+          container.innerHTML = '<div class="text-center text-xs text-slate-500 my-4">Start a conversation</div>';
+          result.data.forEach(m => {
+            const div = document.createElement('div');
+            const cls = m.sender === 'User' ? 'msg-user' : 'msg-admin';
+            div.className = `msg-bubble ${cls}`;
+            div.textContent = m.message;
+            container.appendChild(div);
+          });
+          scrollToBottom();
         }
       } catch(e) {}
     }
@@ -495,7 +501,7 @@
       noticeArea.appendChild(alert);
     }
     function acceptChatCookie(btn) { localStorage.setItem('chat_cookie_accepted', 'true'); btn.parentElement.remove(); }
-    
+
     // 物理引擎與特效
     let engine, runner, gravityTimeout, isGravityActive = false;
     function initGravity() {
@@ -507,7 +513,7 @@
       engine = Engine.create();
       const elements = document.querySelectorAll('.physics-body'); const bodies = [];
       elements.forEach(el => {
-        const rect = el.getBoundingClientRect(); el.dataset.origStyle = el.getAttribute('style') || ''; 
+        const rect = el.getBoundingClientRect(); el.dataset.origStyle = el.getAttribute('style') || '';
         const body = Bodies.rectangle(rect.left + rect.width / 2, rect.top + rect.height / 2, rect.width, rect.height, { restitution: 0.8, friction: 0.5 });
         body.domElement = el; bodies.push(body);
         el.style.position = 'fixed'; el.style.width = rect.width + 'px'; el.style.height = rect.height + 'px'; el.style.zIndex = '9999'; el.style.left = '0'; el.style.top = '0'; el.style.transform = `translate(${rect.left}px, ${rect.top}px)`;
