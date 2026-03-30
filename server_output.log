@@ -1,0 +1,6 @@
+127.0.0.1 - - [30/Mar/2026 14:08:14] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 14:08:14] "GET /output.css HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 14:08:15] "GET /FakePearl-Regular.ttf HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 14:14:49] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 14:14:49] "GET /output.css HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 14:14:50] "GET /FakePearl-Regular.ttf HTTP/1.1" 200 -
