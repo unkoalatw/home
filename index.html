@@ -308,7 +308,10 @@
 
       let sessionId = localStorage.getItem('chat_session_id');
       if (!sessionId) {
-        sessionId = 'sess_' + Math.random().toString(36).substr(2, 9);
+        const array = new Uint8Array(16);
+        window.crypto.getRandomValues(array);
+        const randomHex = Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+        sessionId = 'sess_' + randomHex;
         localStorage.setItem('chat_session_id', sessionId);
       }
       window.sessionId = sessionId;
