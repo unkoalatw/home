@@ -1,0 +1,3 @@
+## 2026-04-03 - Accessible Interactive Elements
+**Learning:** Using `<div>` elements for interactive components like dock items and close buttons prevents proper keyboard navigation and screen reader support. Icon-only buttons lacking `aria-label` attributes provide no context to assistive technologies.
+**Action:** Replaced interactive `<div>` elements with semantic `<button>` elements to restore native keyboard accessibility (focus states, tab order). Added descriptive `aria-label` attributes to all icon-only buttons (dock items, chat controls, modals) to ensure screen readers can accurately interpret their function.
