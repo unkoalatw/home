@@ -1,0 +1,3 @@
+## 2026-04-07 - Semantic interactive UI elements
+**Learning:** Icon-only interactive elements implemented as `<div>` tags with `onclick` handlers (like `.dock-item`) break keyboard navigation and lack context for screen readers. This pattern was prevalent in the custom UI elements of the portfolio.
+**Action:** Replaced interactive `<div>` elements with native `<button>` tags and added explicit `aria-label` attributes based on their contextual `data-tooltip` to inherit built-in focus management and keyboard interaction automatically. This pattern should be consistently applied to all custom, script-driven UI interactions.
