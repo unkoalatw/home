@@ -1,0 +1,3 @@
+## 2024-05-18 - Tailwind Preflight Button Conversion
+**Learning:** Tailwind's preflight base CSS resets default `<button>` styles, which allows interactive `<div>` elements (like `.dock-item`) to be structurally converted to semantic `<button>` tags without causing visual regressions in this project.
+**Action:** When creating new interactive icon-only elements or upgrading existing ones, default to using `<button>` instead of `<div>` with `onclick` to automatically gain keyboard focusability and semantic meaning while maintaining visual parity.
