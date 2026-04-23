@@ -1,0 +1,3 @@
+## 2023-10-25 - Semantic Interactive Elements for Keyboard & Screen Reader Accessibility
+**Learning:** Found that custom UI components (like `.dock-item`) were built using `<div>` tags with `onclick` handlers, which broke native keyboard navigation (Tab order, focus states) and lacked context for screen readers. Using icon-only `<div>`s without ARIA labels makes them effectively invisible to assistive technologies.
+**Action:** Converted `<div>` elements acting as buttons to semantic `<button>` tags, ensuring automatic keyboard focus support. Added descriptive `aria-label` attributes to the buttons and `aria-hidden="true"` to the purely visual inner FontAwesome icons.
