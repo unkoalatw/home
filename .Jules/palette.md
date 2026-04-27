@@ -1,0 +1,3 @@
+## 2025-04-27 - Converting Floating Dock Items to Buttons
+**Learning:** In Tailwind CSS environments where standard structural resets are applied, interactive structural elements utilizing generic container tags like `<div>` alongside pointer event listeners (e.g. `onclick`) can be natively converted to semantic `<button>` tags without incurring visual regressions or requiring custom overriding styles, naturally providing native keyboard access and active/focus states.
+**Action:** When implementing interactive UI elements that resemble buttons (especially icon-only triggers) across this application, prefer semantic HTML tags like `<button>` naturally enhanced by standard Tailwind preflight resets instead of binding generic `<div>` tags with `onclick` handlers.
