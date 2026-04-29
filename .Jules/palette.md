@@ -1,0 +1,3 @@
+## 2024-05-24 - Converting Interactive Divs to Semantic Buttons
+**Learning:** Tailwind's preflight base CSS in this project resets default `<button>` styles. This allows safe structural conversions of interactive `<div>` elements (like `.dock-item`) to semantic `<button>` tags for improved accessibility without causing visual regressions.
+**Action:** When encountering interactive `<div>` elements acting as buttons, boldly convert them to `<button>` tags with appropriate `aria-label` attributes to automatically ensure proper keyboard navigation and focus management, instead of maintaining complex `onclick` handlers on generic containers.
