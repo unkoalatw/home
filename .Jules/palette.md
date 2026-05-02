@@ -1,0 +1,3 @@
+## 2024-05-24 - Interactive Div to Button Conversion in Tailwind
+**Learning:** Tailwind's base preflight automatically strips native button styles (like padding, background, border), making it exceptionally safe to convert interactive structural `<div>` elements into semantic `<button>` elements for accessibility. This provides native focus states and keyboard interaction support (Enter/Space to click) without causing any visual regressions.
+**Action:** Always favor converting interactive `<div>` blocks directly to `<button>` elements rather than adding `tabindex="0"` and JS keyboard event listeners when working in Tailwind projects.
