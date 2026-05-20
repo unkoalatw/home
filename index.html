@@ -141,7 +141,7 @@
         <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
         <span class="font-bold text-emerald-400 text-sm">Live Chat</span>
       </div>
-      <button onclick="toggleChat()" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button>
+      <button aria-label="Close Chat" onclick="toggleChat()" class="text-slate-400 hover:text-white"><i class="fas fa-times" aria-hidden="true"></i></button>
     </div>
     <div id="chat-notice-area"></div>
     <div class="chat-messages" id="chat-messages">
@@ -149,32 +149,32 @@
     </div>
     <div class="chat-input-area">
       <input type="text" id="chat-input" placeholder="Type a message..." class="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-emerald-500" onkeydown="if(event.key==='Enter') sendMessage()">
-      <button onclick="sendMessage()" class="w-10 h-10 bg-emerald-600 rounded-lg text-white hover:bg-emerald-500 transition"><i class="fas fa-paper-plane"></i></button>
+      <button aria-label="Send Message" onclick="sendMessage()" class="w-10 h-10 bg-emerald-600 rounded-lg text-white hover:bg-emerald-500 transition"><i class="fas fa-paper-plane" aria-hidden="true"></i></button>
     </div>
   </div>
 
   <!-- 懸浮工具列 (Dock) -->
   <div class="floating-dock">
-    <div class="dock-item" data-tooltip="HOME" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-      <i class="fas fa-home"></i>
-    </div>
-    <div class="dock-item" data-tooltip="WORK" onclick="document.getElementById('links-container').scrollIntoView({behavior:'smooth'})">
-      <i class="fas fa-layer-group"></i>
-    </div>
-    <div class="dock-item" data-tooltip="SKILLS" onclick="document.querySelector('.marquee-container').scrollIntoView({behavior:'smooth'})">
-      <i class="fas fa-code"></i>
-    </div>
+    <button class="dock-item" aria-label="Home" data-tooltip="HOME" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+      <i class="fas fa-home" aria-hidden="true"></i>
+    </button>
+    <button class="dock-item" aria-label="Selected Work" data-tooltip="WORK" onclick="document.getElementById('links-container').scrollIntoView({behavior:'smooth'})">
+      <i class="fas fa-layer-group" aria-hidden="true"></i>
+    </button>
+    <button class="dock-item" aria-label="Skills" data-tooltip="SKILLS" onclick="document.querySelector('.marquee-container').scrollIntoView({behavior:'smooth'})">
+      <i class="fas fa-code" aria-hidden="true"></i>
+    </button>
     <div class="w-px h-6 md:w-6 md:h-px bg-white/10 self-center mx-1 md:my-1 md:mx-0"></div>
-    <div class="dock-item" data-tooltip="TERMINAL" onclick="toggleTerminal()">
-      <i class="fas fa-terminal"></i>
-    </div>
-    <div class="dock-item" data-tooltip="CHAT" onclick="toggleChat()">
-      <i class="fas fa-comment-dots"></i>
+    <button class="dock-item" aria-label="Terminal" data-tooltip="TERMINAL" onclick="toggleTerminal()">
+      <i class="fas fa-terminal" aria-hidden="true"></i>
+    </button>
+    <button class="dock-item" aria-label="Chat" data-tooltip="CHAT" onclick="toggleChat()">
+      <i class="fas fa-comment-dots" aria-hidden="true"></i>
       <span id="dock-chat-badge" class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full hidden animate-ping"></span>
-    </div>
-    <div class="dock-item" data-tooltip="SOUND" id="dock-sound-btn">
-      <i class="fas fa-volume-mute"></i>
-    </div>
+    </button>
+    <button class="dock-item" aria-label="Toggle Sound" data-tooltip="SOUND" id="dock-sound-btn">
+      <i class="fas fa-volume-mute" aria-hidden="true"></i>
+    </button>
   </div>
 
   <!-- 自定義右鍵選單 -->
