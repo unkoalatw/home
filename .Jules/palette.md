@@ -1,0 +1,3 @@
+## 2024-05-26 - Safe Conversion of Divs to Buttons with Tailwind
+**Learning:** Tailwind CSS's preflight successfully resets default `<button>` styles (like borders, backgrounds, and padding). This makes it entirely safe to perform direct structural conversions of interactive `<div>` elements into semantic `<button>` tags without causing visual regressions or requiring additional CSS overrides to maintain the design.
+**Action:** Always favor converting click-handler `<div>` elements directly to `<button>` tags for improved accessibility (keyboard navigation, semantics) in Tailwind-based projects.
