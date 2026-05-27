@@ -1,0 +1,3 @@
+## 2024-05-24 - Zero-Regression Semantic Upgrades with Tailwind
+**Learning:** Tailwind CSS Preflight base styles automatically strip standard `<button>` styling (like background, border, and padding). This means you can safely convert non-semantic `<div>` interactive elements to semantic `<button>` elements to gain built-in keyboard navigation without causing any visual regressions or needing custom CSS overrides.
+**Action:** Always prioritize converting interactive `<div>` elements to `<button>` tags when working in Tailwind projects to easily improve keyboard accessibility and semantic HTML.
