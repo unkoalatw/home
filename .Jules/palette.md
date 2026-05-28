@@ -1,0 +1,3 @@
+## 2024-05-28 - Semantic buttons in Tailwind preflight
+**Learning:** Tailwind's preflight resets default `<button>` styles, allowing safe structural conversions of interactive `<div>` elements to semantic `<button>` tags without causing visual regressions. Combining this with `aria-hidden="true"` on internal FontAwesome icons creates robust, accessible interactive components.
+**Action:** Replace `div` or `a` tags functioning as buttons with native `<button>` tags when Tailwind is used, ensuring descriptive `aria-label`s are applied and internal visual icons are explicitly hidden from screen readers.
