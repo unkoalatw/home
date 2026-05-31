@@ -1,0 +1,3 @@
+## 2024-05-24 - Accessibility for Icon-Only Buttons
+**Learning:** Icon-only interactive elements lacking semantic tags (like using `<div>` instead of `<button>`) and `aria-label`s create significant accessibility barriers, as screen readers may not announce them correctly or convey their purpose. Furthermore, raw font icon data (e.g., FontAwesome `<i>` tags) within these elements should be hidden with `aria-hidden="true"` to prevent screen readers from reading meaningless characters.
+**Action:** Always use semantic `<button>` tags for interactive UI elements. Ensure all icon-only buttons have descriptive `aria-label`s to explain their function, and apply `aria-hidden="true"` to the internal icon elements to optimize the screen reader experience.
