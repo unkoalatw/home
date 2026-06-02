@@ -1,0 +1,3 @@
+## 2024-06-02 - Tailwind Preflight and Semantic Buttons
+**Learning:** Tailwind CSS's preflight resets default `<button>` styles globally. This is extremely beneficial for accessibility because it allows interactive `<div>` elements (like the `.dock-item` components) to be safely converted to semantic `<button>` tags without causing visual regressions or breaking the existing layout.
+**Action:** Always prefer converting interactive `<div>`s to semantic `<button>`s in Tailwind projects. You can rely on the preflight to handle the structural changes gracefully, enabling built-in keyboard navigation and focus management without extra CSS.
