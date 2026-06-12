@@ -1,0 +1,3 @@
+## 2024-06-12 - Semantic HTML in Tailwind Projects
+**Learning:** In Tailwind-based projects, `div` elements acting as interactive buttons can often be safely converted to semantic `<button>` tags without breaking the existing styling. This is because Tailwind's preflight resets default button styles, making it an easy win for keyboard and screen reader accessibility without introducing visual regressions.
+**Action:** When auditing Tailwind projects, proactively look for `div` tags with `onclick` handlers (like dock items) and convert them to `<button>` tags, adding appropriate `aria-label` attributes to the buttons and `aria-hidden="true"` to any inner decorative icons.
