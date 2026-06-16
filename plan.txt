@@ -1,0 +1,5 @@
+1. We need to convert `.dock-item` div elements to `<button>` elements to improve keyboard accessibility.
+2. We must add `aria-label` to each dock button, utilizing the `data-tooltip` value for semantic meaning.
+3. Since they are buttons with FontAwesome icons inside, we should add `aria-hidden="true"` to the `<i>` tags.
+4. Tailwind's preflight resets button styles, so making them `<button>` will look visually identical but be much better for screen readers and keyboard navigation (they'll naturally get focus).
+5. Ensure `index.html` dos/unix line ending handling.
