@@ -141,7 +141,7 @@
         <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
         <span class="font-bold text-emerald-400 text-sm">Live Chat</span>
       </div>
-      <button onclick="toggleChat()" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button>
+      <button onclick="toggleChat()" class="text-slate-400 hover:text-white" aria-label="Close chat"><i class="fas fa-times" aria-hidden="true"></i></button>
     </div>
     <div id="chat-notice-area"></div>
     <div class="chat-messages" id="chat-messages">
@@ -149,7 +149,7 @@
     </div>
     <div class="chat-input-area">
       <input type="text" id="chat-input" placeholder="Type a message..." class="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-emerald-500" onkeydown="if(event.key==='Enter') sendMessage()">
-      <button onclick="sendMessage()" class="w-10 h-10 bg-emerald-600 rounded-lg text-white hover:bg-emerald-500 transition"><i class="fas fa-paper-plane"></i></button>
+      <button onclick="sendMessage()" class="w-10 h-10 bg-emerald-600 rounded-lg text-white hover:bg-emerald-500 transition" aria-label="Send message"><i class="fas fa-paper-plane" aria-hidden="true"></i></button>
     </div>
   </div>
 
