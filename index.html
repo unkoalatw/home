@@ -554,7 +554,21 @@
     function toggleTerminal() { const o = document.getElementById('terminal-overlay'), i = document.getElementById('terminal-input'); if(o.classList.contains('-translate-y-full')) { o.classList.remove('-translate-y-full'); i.focus(); } else { o.classList.add('-translate-y-full'); } }
     function initTerminal() { const o=document.getElementById('terminal-overlay'), i=document.getElementById('terminal-input'), out=document.getElementById('terminal-output'); document.addEventListener('keydown', e => { if(e.key === '/' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); toggleTerminal(); } }); i.addEventListener('keydown', e => { if(e.key==='Enter') { const c=i.value; i.value=''; printLog(`user@port:~$ ${c}`); process(c.trim().toLowerCase()); } }); function printLog(h) { const d=document.createElement('div'); d.innerHTML=h; out.appendChild(d); out.scrollTop=out.scrollHeight; } function process(c) { let r=''; switch(c) { case 'help': r='Commands: ls, cat, gravity, matrix, exit'; break; case 'ls': r='gravity_module.exe  secrets.txt'; break; case 'gravity': r='Activating Zero-G Physics Engine...'; setTimeout(initGravity, 1000); break; case 'exit': toggleTerminal(); break; default: r=`Unknown: ${c}`; } printLog(r); } }
     function startTypewriter() { const el=document.getElementById('typewriter'); let w=0, c=0, d=false; function type() { if(!typingWords.length) return; const txt = typingWords[w]; el.textContent = txt.substring(0, d?c-1:c+1); d?c--:c++; let s = d?30:80; if(!d && c===txt.length) { d=true; s=2500; } else if(d && c===0) { d=false; w=(w+1)%typingWords.length; s=500; } setTimeout(type, s); } type(); }
-    function initScrollProgress() { const bar=document.getElementById('scroll-progress'); window.addEventListener('scroll', () => { const s = document.documentElement.scrollTop || document.body.scrollTop; const h = document.documentElement.scrollHeight - document.documentElement.clientHeight; bar.style.width = `${(s/h)*100}%`; }); }
+    function initScrollProgress() {
+      const bar = document.getElementById('scroll-progress');
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            const s = document.documentElement.scrollTop || document.body.scrollTop;
+            const h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            bar.style.width = `${(s/h)*100}%`;
+            ticking = false;
+          });
+          ticking = true;
+        }
+      });
+    }
   </script>
 </body>
 </html>
