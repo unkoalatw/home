@@ -141,7 +141,7 @@
         <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
         <span class="font-bold text-emerald-400 text-sm">Live Chat</span>
       </div>
-      <button onclick="toggleChat()" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button>
+      <button aria-label="Close Chat" onclick="toggleChat()" class="text-slate-400 hover:text-white"><i class="fas fa-times" aria-hidden="true"></i></button>
     </div>
     <div id="chat-notice-area"></div>
     <div class="chat-messages" id="chat-messages">
@@ -149,7 +149,7 @@
     </div>
     <div class="chat-input-area">
       <input type="text" id="chat-input" placeholder="Type a message..." class="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-emerald-500" onkeydown="if(event.key==='Enter') sendMessage()">
-      <button onclick="sendMessage()" class="w-10 h-10 bg-emerald-600 rounded-lg text-white hover:bg-emerald-500 transition"><i class="fas fa-paper-plane"></i></button>
+      <button aria-label="Send Message" onclick="sendMessage()" class="w-10 h-10 bg-emerald-600 rounded-lg text-white hover:bg-emerald-500 transition"><i class="fas fa-paper-plane" aria-hidden="true"></i></button>
     </div>
   </div>
 
@@ -315,13 +315,20 @@
       fetchChatHistory();
       setInterval(fetchChatHistory, 10000);
 
-      fetchData().then(() => {
+      const hidePreloader = () => {
         updateLoader(100);
         setTimeout(() => {
           const preloader = document.getElementById('preloader');
           preloader.style.opacity = '0';
           preloader.style.visibility = 'hidden';
         }, 800); 
+      };
+
+      const fallbackTimer = setTimeout(hidePreloader, 3000);
+
+      fetchData().then(() => {
+        clearTimeout(fallbackTimer);
+        hidePreloader();
       });
     };
 
@@ -374,7 +381,7 @@
       ];
       
       links.forEach(link => {
-         if(s[link.k]) html += `<a href="${link.u}" target="_blank" class="${btnClass}" title="${link.t}"><i class="${link.i}"></i></a>`;
+         if(s[link.k]) html += `<a href="${link.u}" target="_blank" aria-label="${link.t}" class="${btnClass}" title="${link.t}"><i class="${link.i}" aria-hidden="true"></i></a>`;
       });
       social.innerHTML = html;
       if(!isMobile) initMagneticButtons(); 
@@ -419,7 +426,7 @@
       const imgUrl = toCDN(item.imageUrl || 'https://placehold.co/800');
       
       content.innerHTML = `
-        <div class="close-btn" onclick="closeCard()"><i class="fas fa-times"></i></div>
+        <button aria-label="Close Project Card" class="close-btn" onclick="closeCard()"><i class="fas fa-times" aria-hidden="true"></i></button>
         <div class="h-64 md:h-96 relative">
            <img src="${imgUrl}" class="w-full h-full object-cover">
            <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent"></div>
@@ -491,7 +498,7 @@
       const noticeArea = document.getElementById('chat-notice-area');
       const alert = document.createElement('div');
       alert.className = 'cookie-alert';
-      alert.innerHTML = `<i class="fas fa-info-circle"></i><div class="flex-1">為保存對話紀錄，本站使用 Cookies。<br><span class="text-[9px] opacity-70">清理快取將遺失對話。</span></div><button onclick="acceptChatCookie(this)" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button>`;
+      alert.innerHTML = `<i class="fas fa-info-circle" aria-hidden="true"></i><div class="flex-1">為保存對話紀錄，本站使用 Cookies。<br><span class="text-[9px] opacity-70">清理快取將遺失對話。</span></div><button aria-label="Accept Cookies" onclick="acceptChatCookie(this)" class="text-slate-400 hover:text-white"><i class="fas fa-times" aria-hidden="true"></i></button>`;
       noticeArea.appendChild(alert);
     }
     function acceptChatCookie(btn) { localStorage.setItem('chat_cookie_accepted', 'true'); btn.parentElement.remove(); }
