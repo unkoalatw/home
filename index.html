@@ -141,7 +141,7 @@
         <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
         <span class="font-bold text-emerald-400 text-sm">Live Chat</span>
       </div>
-      <button onclick="toggleChat()" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button>
+      <button onclick="toggleChat()" class="text-slate-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded" aria-label="Close Chat"><i class="fas fa-times" aria-hidden="true"></i></button>
     </div>
     <div id="chat-notice-area"></div>
     <div class="chat-messages" id="chat-messages">
@@ -149,7 +149,7 @@
     </div>
     <div class="chat-input-area">
       <input type="text" id="chat-input" placeholder="Type a message..." class="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-emerald-500" onkeydown="if(event.key==='Enter') sendMessage()">
-      <button onclick="sendMessage()" class="w-10 h-10 bg-emerald-600 rounded-lg text-white hover:bg-emerald-500 transition"><i class="fas fa-paper-plane"></i></button>
+      <button onclick="sendMessage()" class="w-10 h-10 bg-emerald-600 rounded-lg text-white hover:bg-emerald-500 transition focus:outline-none focus:ring-2 focus:ring-emerald-500" aria-label="Send Message"><i class="fas fa-paper-plane" aria-hidden="true"></i></button>
     </div>
   </div>
 
@@ -179,17 +179,17 @@
 
   <!-- 自定義右鍵選單 -->
   <div id="context-menu">
-    <div class="ctx-item cursor-hover" onclick="location.reload()">
-      <i class="fas fa-sync-alt w-4"></i> Reload System
+    <button class="ctx-item cursor-hover w-full text-left" onclick="location.reload()">
+      <i class="fas fa-sync-alt w-4" aria-hidden="true"></i> Reload System
       <span class="ctx-shortcut">F5</span>
-    </div>
+    </button>
     <div class="ctx-divider"></div>
-    <div class="ctx-item cursor-hover" onclick="initGravity()">
-      <i class="fas fa-apple-alt w-4"></i> Gravity Mode
-    </div>
-    <div class="ctx-item cursor-hover" onclick="toggleSound()">
-      <i class="fas fa-music w-4"></i> Toggle Sound
-    </div>
+    <button class="ctx-item cursor-hover w-full text-left" onclick="initGravity()">
+      <i class="fas fa-apple-alt w-4" aria-hidden="true"></i> Gravity Mode
+    </button>
+    <button class="ctx-item cursor-hover w-full text-left" onclick="toggleSound()">
+      <i class="fas fa-music w-4" aria-hidden="true"></i> Toggle Sound
+    </button>
   </div>
 
   <main id="main-content" class="relative z-10 max-w-6xl mx-auto px-6 py-24 pb-32">
@@ -389,8 +389,8 @@
         // 項目圖片套用 CDN 邏輯
         const imgUrl = toCDN(item.imageUrl || 'https://placehold.co/600x400/1e293b/FFF?text=Image');
         const html = `
-          <div onclick='openCard(${JSON.stringify(item)})' 
-             class="glass-card spotlight-card group relative flex flex-col md:flex-row rounded-xl overflow-hidden cursor-pointer physics-body hover:scale-[1.01] transition-transform duration-300">
+          <div role="button" tabindex="0" onclick=\'openCard(${JSON.stringify(item)})\' onkeydown=\'if(event.key === "Enter" || event.key === " ") { event.preventDefault(); openCard(${JSON.stringify(item)}); }\'
+             class="glass-card spotlight-card group relative flex flex-col md:flex-row rounded-xl overflow-hidden cursor-pointer physics-body hover:scale-[1.01] transition-transform duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
             <div class="h-48 md:h-auto md:w-1/4 relative overflow-hidden shrink-0 border-b md:border-b-0 md:border-r border-slate-700/50">
                <img src="${imgUrl}" 
                     class="w-full h-full object-cover transition duration-700 group-hover:scale-105 pointer-events-none">
@@ -419,7 +419,7 @@
       const imgUrl = toCDN(item.imageUrl || 'https://placehold.co/800');
       
       content.innerHTML = `
-        <div class="close-btn" onclick="closeCard()"><i class="fas fa-times"></i></div>
+        <button class="close-btn focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full" onclick="closeCard()" aria-label="Close details"><i class="fas fa-times" aria-hidden="true"></i></button>
         <div class="h-64 md:h-96 relative">
            <img src="${imgUrl}" class="w-full h-full object-cover">
            <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent"></div>
@@ -491,7 +491,7 @@
       const noticeArea = document.getElementById('chat-notice-area');
       const alert = document.createElement('div');
       alert.className = 'cookie-alert';
-      alert.innerHTML = `<i class="fas fa-info-circle"></i><div class="flex-1">為保存對話紀錄，本站使用 Cookies。<br><span class="text-[9px] opacity-70">清理快取將遺失對話。</span></div><button onclick="acceptChatCookie(this)" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button>`;
+      alert.innerHTML = `<i class="fas fa-info-circle"></i><div class="flex-1">為保存對話紀錄，本站使用 Cookies。<br><span class="text-[9px] opacity-70">清理快取將遺失對話。</span></div><button onclick="acceptChatCookie(this)" class="text-slate-400 hover:text-white focus:outline-none focus:ring-1 focus:ring-emerald-500 rounded" aria-label="Dismiss cookie notice"><i class="fas fa-times" aria-hidden="true"></i></button>`;
       noticeArea.appendChild(alert);
     }
     function acceptChatCookie(btn) { localStorage.setItem('chat_cookie_accepted', 'true'); btn.parentElement.remove(); }
