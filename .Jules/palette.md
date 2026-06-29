@@ -1,3 +1,6 @@
 ## 2024-05-24 - Accessibility for Icon-only Dock Items
 **Learning:** Using `<div>` tags for icon-only buttons with `onclick` handlers creates accessibility barriers because they lack semantic meaning and focus management, and screen readers may read the raw font data for the icons.
 **Action:** Always convert interactive icon-only elements to semantic `<button>` tags, provide descriptive `aria-label` attributes to convey their purpose, and add `aria-hidden="true"` to the internal `<i>` elements.
+## 2024-05-25 - Avoid Static aria-labels on Context Menu Items
+**Learning:** When converting complex interactive `<div>` elements (like context menus or project cards) into semantic `<button>` elements, adding a generic static `aria-label` attribute on the wrapper `<button>` can completely mask meaningful inner text or semantic sub-elements (like shortcut key spans). This creates an accessibility regression for screen reader users by preventing them from hearing the actual text content of the button.
+**Action:** When adding accessibility to complex interactive components, avoid blanket static `aria-label`s on wrapper elements if the inner content provides semantic value. Instead, use specific ARIA roles (e.g., `role="menuitem"`), hide decorative elements (e.g., `aria-hidden="true"` on icons), and allow the natural text content to be read by assistive technologies.

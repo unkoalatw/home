@@ -178,18 +178,18 @@
   </div>
 
   <!-- 自定義右鍵選單 -->
-  <div id="context-menu">
-    <div class="ctx-item cursor-hover" onclick="location.reload()">
-      <i class="fas fa-sync-alt w-4"></i> Reload System
+  <div id="context-menu" role="menu" aria-label="Context options">
+    <button class="ctx-item cursor-hover w-full" onclick="location.reload()" role="menuitem">
+      <i class="fas fa-sync-alt w-4" aria-hidden="true"></i> Reload System
       <span class="ctx-shortcut">F5</span>
-    </div>
-    <div class="ctx-divider"></div>
-    <div class="ctx-item cursor-hover" onclick="initGravity()">
-      <i class="fas fa-apple-alt w-4"></i> Gravity Mode
-    </div>
-    <div class="ctx-item cursor-hover" onclick="toggleSound()">
-      <i class="fas fa-music w-4"></i> Toggle Sound
-    </div>
+    </button>
+    <div class="ctx-divider" role="separator"></div>
+    <button class="ctx-item cursor-hover w-full" onclick="initGravity()" role="menuitem">
+      <i class="fas fa-apple-alt w-4" aria-hidden="true"></i> Gravity Mode
+    </button>
+    <button class="ctx-item cursor-hover w-full" onclick="toggleSound()" role="menuitem">
+      <i class="fas fa-music w-4" aria-hidden="true"></i> Toggle Sound
+    </button>
   </div>
 
   <main id="main-content" class="relative z-10 max-w-6xl mx-auto px-6 py-24 pb-32">
